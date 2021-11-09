@@ -1,11 +1,11 @@
-#ifndef _FRAME_SETTINGS_H_
-#define _FRAME_SETTINGS_H_
+#ifndef _FRAME_GFXDEMO_H_
+#define _FRAME_GFXDEMO_H_
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Settings
+* Frame: GfxDemo
 *******************************************************************************/
 
 /******************************************************************************
@@ -17,15 +17,13 @@
 /******************************************************************************
 * Class Definition
 *******************************************************************************/
-class Frame_Settings : public Frame_Base
+class Frame_GfxDemo : public Frame_Base
 {
 	public:
-		Frame_Settings();
-		~Frame_Settings();
+		Frame_GfxDemo();
+		~Frame_GfxDemo();
 		int init(gui_args_vector_t &args);
-
-	private:
-		GUI_Button *_key[4];
+		int run();
 };
 
 #endif

@@ -2,14 +2,16 @@
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame-Base-Class
+* Frame: GfxDemo
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include "frame_base.h"
-#include "../gui/gui.h"
+#include <M5Core2.h>
+
+#include "main.h"
+#include "frame_gfxdemo.h"
 
 /******************************************************************************
 * Functions
@@ -18,54 +20,66 @@
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-Frame_Base::Frame_Base(bool _has_title)
+Frame_GfxDemo::Frame_GfxDemo(void)
 {
-	if (_has_title)
-	{
+	_frame_name = "Frame_GfxDemo";
 
-	}
-	_frame_id = 0;
-	_frame_name = "Frame_Base";
-	GUI_UpdateGlobalLastActiveTime();
+	M5.Lcd.drawBitmap(0, 24, 320, 216, Window);
+
+	M5.Lcd.setCursor(24 + 8, 41);
+	M5.Lcd.println(_frame_name);
+
+	exitbtn();
+	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
+	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-Frame_Base::~Frame_Base()
-{
-	if (_key_exit != NULL)
-		delete _key_exit;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void Frame_Base::exitbtn(void)
-{
-	_key_exit = new GUI_Button(0, 24, 24, 25, CloseWindowUp, CloseWindowDown);
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-int Frame_Base::run(void)
-{
-	return _is_run;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void Frame_Base::exit(void)
+Frame_GfxDemo::~Frame_GfxDemo(void)
 {
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void Frame_Base::exit_cb(gui_args_vector_t &args)
+int Frame_GfxDemo::init(gui_args_vector_t &args)
 {
-	GUI_PopFrame();
-	*((int *)(args[0])) = 0;
+	_is_run = 1;
+
+	M5.Lcd.drawBitmap(0, 24, 320, 216, Window);
+
+	M5.Lcd.setCursor(24 + 8, 41);
+	M5.Lcd.println(_frame_name);
+
+	GUI_AddObject(_key_exit);
+	_key_exit->init();
+
+	return 3;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+int Frame_GfxDemo::run()
+{
+	// Gfx-Demo
+	M5.Lcd.fillRect(10, 50, 300, 180, M5.Lcd.color565(149, 149, 149));
+
+	int x = random(300 - 10);
+	int y = random(180 - 50);
+
+	int w = 300 - x;
+	int h = 180 - y;
+
+	int r = random(255);
+	int g = random(255);
+	int b = random(255);
+
+	M5.Lcd.fillRect(x + 10, y + 50, w, h, M5.Lcd.color565(r, g, b));
+
+	delay(125);
+
+	return 1;
 }

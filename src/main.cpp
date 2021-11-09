@@ -65,6 +65,17 @@ void setup()
 
 	Frame_Main *frame_main = new Frame_Main();
 	GUI_PushFrame(frame_main);
+
+#ifdef BOARD_HAS_PSRAM
+	Serial.println(ESP.getHeapSize());
+	Serial.println(ESP.getFreeHeap());
+
+	//if (ESP.getPsramSize() > 0)
+	//	Serial.println(ESP.getPsramSize());
+
+	Serial.println(ESP.getFreePsram());
+#endif
+
 }
 
 /*------------------------------------------------------------------------------

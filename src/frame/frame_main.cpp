@@ -13,6 +13,7 @@
 
 #include "frame_main.h"
 #include "frame_settings.h"
+#include "frame_gfxdemo.h"
 
 /******************************************************************************
 * Functions
@@ -37,6 +38,22 @@ void key_app0_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void key_app1_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_GfxDemo");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_GfxDemo();
+		GUI_AddFrame("Frame_GfxDemo", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_Main::Frame_Main(void): Frame_Base(false)
 {
 	_frame_name = "Frame_Main";
@@ -46,44 +63,43 @@ Frame_Main::Frame_Main(void): Frame_Base(false)
 	{
 		for (uint8_t x = 0; x < 4; x++)
 		{
-			sprintf(buffer, "But%01d", (y * 4) + x);
 			switch ((y * 4) + x)
 			{
 				case 0:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Font_U, Icon_Font_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Font_U, Icon_Font_D);
 					break;
 				case 1:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_IControl_U, Icon_IControl_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_IControl_U, Icon_IControl_D);
 					break;
 				case 2:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Input_U, Icon_Input_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Input_U, Icon_Input_D);
 					break;
 				case 3:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Locale_U, Icon_Locale_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Locale_U, Icon_Locale_D);
 					break;
 				case 4:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Overscan_U, Icon_Overscan_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Overscan_U, Icon_Overscan_D);
 					break;
 				case 5:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Palette_U, Icon_Palette_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Palette_U, Icon_Palette_D);
 					break;
 				case 6:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Pointer_U, Icon_Pointer_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Pointer_U, Icon_Pointer_D);
 					break;
 				case 7:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_ScreenMode_U, Icon_ScreenMode_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_ScreenMode_U, Icon_ScreenMode_D);
 					break;
 				case 8:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Serial_U, Icon_Serial_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Serial_U, Icon_Serial_D);
 					break;
 				case 9:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Sound_U, Icon_Sound_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Sound_U, Icon_Sound_D);
 					break;
 				case 10:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Time_U, Icon_Time_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_Time_U, Icon_Time_D);
 					break;
 				case 11:
-					_key[(y * 4) + x] = new GUI_Button(buffer, (x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_WBPattern_U, Icon_WBPattern_D);
+					_key[(y * 4) + x] = new GUI_Button((x * (KEY_W + 8)) + 8, (y * (KEY_H + 24)) + 8 + 24, KEY_W, KEY_H, Icon_WBPattern_U, Icon_WBPattern_D);
 					break;
 			}
 		}
@@ -92,6 +108,9 @@ Frame_Main::Frame_Main(void): Frame_Base(false)
 	// Button-Functions
 	_key[0]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[0]->Bind(GUI_Button::EVENT_RELEASED, key_app0_cb);
+
+	_key[1]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[1]->Bind(GUI_Button::EVENT_RELEASED, key_app1_cb);
 
 	_time = 0;
 	_next_update_time = 0;

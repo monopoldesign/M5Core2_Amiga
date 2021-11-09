@@ -73,9 +73,33 @@ void GUI_Button::Draw()
 		return;
 
 	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
+	{
 		M5.Lcd.drawBitmap(_x, _y, _w, _h, _imageUp);
+
+		if (_label.length() > 0)
+		{
+			M5.Lcd.setFreeFont(&FreeSans9pt7b);
+			M5.Lcd.setTextSize(1);
+			M5.Lcd.setTextColor(BLACK);
+
+			M5.Lcd.setCursor(_x + 112, _y + 22);
+			M5.Lcd.print(_label);
+		}
+	}
 	else if (_state == EVENT_PRESSED)
+	{
 		M5.Lcd.drawBitmap(_x, _y, _w, _h, _imageDown);
+
+		if (_label.length() > 0)
+		{
+			M5.Lcd.setFreeFont(&FreeSans9pt7b);
+			M5.Lcd.setTextSize(1);
+			M5.Lcd.setTextColor(BLACK);
+
+			M5.Lcd.setCursor(_x + 112 + 2, _y + 22 + 2);
+			M5.Lcd.print(_label);
+		}
+	}
 }
 
 /*------------------------------------------------------------------------------
