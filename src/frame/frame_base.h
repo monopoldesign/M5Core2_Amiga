@@ -13,17 +13,24 @@
 *******************************************************************************/
 #include <Arduino.h>
 
+#include "../gui/gui_imgbutton.h"
 #include "../gui/gui_button.h"
+#include "../gui/gui_string.h"
 
 /******************************************************************************
 * Definitions
 *******************************************************************************/
+enum BTYPE {BT_NORMAL, BT_RECESSED};
+
 class Frame_Base
 {
 	public:
 		Frame_Base(bool _has_title = true);
 		virtual ~Frame_Base();
+
 		void exitbtn();
+		void bevel(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t type);
+
 		virtual int run();
 		virtual void exit();
 		virtual int init(gui_args_vector_t &args) = 0;
@@ -36,7 +43,7 @@ class Frame_Base
 		static void exit_cb(gui_args_vector_t &args);
 		String _frame_name;
 		int _is_run = 1;
-		GUI_Button *_key_exit = NULL;
+		GUI_ImgButton *_key_exit = NULL;
 		uint32_t _frame_id;
 
 	private:

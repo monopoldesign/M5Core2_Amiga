@@ -2,14 +2,14 @@
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* GUI-Button-Class
+* GUI-Image-Button-Class
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
 #include "M5Core2.h"
-#include "gui_button.h"
+#include "gui_imgbutton.h"
 
 /******************************************************************************
 * Functions
@@ -18,7 +18,7 @@
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-GUI_Button::GUI_Button(int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
+GUI_ImgButton::GUI_ImgButton(int16_t x, int16_t y, int16_t w, int16_t h, const uint16_t *imgUp, const uint16_t *imgDown) : GUI_Base(x, y, w, h)
 {
 	_x = x;
 	_y = y;
@@ -26,34 +26,22 @@ GUI_Button::GUI_Button(int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x,
 	_h = h;
 
 	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
+
+	_imageUp = imgUp;
+	_imageDown = imgDown;
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-GUI_Button::GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
-{
-	_label = label;
-
-	_x = x;
-	_y = y;
-	_w = w;
-	_h = h;
-
-	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-GUI_Button::~GUI_Button()
+GUI_ImgButton::~GUI_ImgButton()
 {
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_Button::init()
+void GUI_ImgButton::init()
 {
 	_buttonZone->setZone(_x, _y, _x + _w, _y + _h);
 }
@@ -61,55 +49,21 @@ void GUI_Button::init()
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_Button::Draw()
+void GUI_ImgButton::Draw()
 {
 	if (_ishide)
 		return;
 
 	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
-	{
-		M5.Lcd.fillRect(_x, _y, _w, _h, M5.Lcd.color565(149, 149, 149));
-		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, WHITE);
-		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, WHITE);
-		M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, BLACK);
-		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, BLACK);
-
-		if (_label.length() > 0)
-		{
-			M5.Lcd.setFreeFont(&FreeSans9pt7b);
-			M5.Lcd.setTextSize(1);
-			M5.Lcd.setTextColor(BLACK);
-
-			uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-			M5.Lcd.setCursor(xtext, _y + 22);
-			M5.Lcd.print(_label);
-		}
-	}
+		M5.Lcd.drawBitmap(_x, _y, _w, _h, _imageUp);
 	else if (_state == EVENT_PRESSED)
-	{
-		M5.Lcd.fillRect(_x, _y, _w, _h, M5.Lcd.color565(149, 149, 149));
-		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, BLACK);
-		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, BLACK);
-		M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, WHITE);
-		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, WHITE);
-
-		if (_label.length() > 0)
-		{
-			M5.Lcd.setFreeFont(&FreeSans9pt7b);
-			M5.Lcd.setTextSize(1);
-			M5.Lcd.setTextColor(BLACK);
-
-			uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-			M5.Lcd.setCursor(xtext + 2, _y + 22 + 2);
-			M5.Lcd.print(_label);
-		}
-	}
+		M5.Lcd.drawBitmap(_x, _y, _w, _h, _imageDown);
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_Button::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
+void GUI_ImgButton::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
 {
 	if (event == EVENT_PRESSED)
 		_pressed_cb = func_cb;
@@ -120,7 +74,7 @@ void GUI_Button::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_Button::UpdateState(TouchPoint_t pos)
+void GUI_ImgButton::UpdateState(TouchPoint_t pos)
 {
 	if (_buttonZone->inHotZone(pos))
 	{
@@ -147,7 +101,7 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_Button::AddArgs(int16_t event, uint16_t n, void* arg)
+void GUI_ImgButton::AddArgs(int16_t event, uint16_t n, void* arg)
 {
 	if (event == EVENT_PRESSED)
 	{

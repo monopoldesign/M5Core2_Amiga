@@ -23,9 +23,11 @@ class Frame_Settings : public Frame_Base
 		Frame_Settings();
 		~Frame_Settings();
 		int init(gui_args_vector_t &args);
+		void setNewValues(void);
 
 	private:
-		GUI_Button *_key[4];
+		GUI_Button *_button[2];
+		GUI_String *_string[2];
 };
 
 #endif

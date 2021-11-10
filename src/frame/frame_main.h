@@ -37,7 +37,7 @@ class Frame_Main : public Frame_Base
 		void AppName();
 
 	private:
-		GUI_Button *_key[MAX_APPS];
+		GUI_ImgButton *_key[MAX_APPS];
 		uint32_t _next_update_time;
 		uint32_t _time;
 };

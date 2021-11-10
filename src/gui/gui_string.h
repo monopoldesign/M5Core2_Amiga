@@ -1,11 +1,11 @@
-#ifndef _GUI_BUTTON_H
-#define _GUI_BUTTON_H
+#ifndef _GUI_STRING_H
+#define _GUI_STRING_H
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* GUI-Button-Class
+* GUI-String-Class
 *******************************************************************************/
 
 /******************************************************************************
@@ -17,7 +17,7 @@
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-class GUI_Button : public GUI_Base
+class GUI_String : public GUI_Base
 {
 	public:
 		static const int16_t EVENT_NONE = 0;
@@ -25,23 +25,21 @@ class GUI_Button : public GUI_Base
 		static const int16_t EVENT_RELEASED = 2;
 
 	public:
-		GUI_Button(int16_t x, int16_t y, int16_t w, int16_t h);
-		GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h);
-		~GUI_Button();
+		GUI_String(String label, String content, int16_t x, int16_t y, int16_t w, int16_t h);
+		GUI_String(String label, uint32_t content, int16_t x, int16_t y, int16_t w, int16_t h);
+		~GUI_String();
 		void init();
 		void Draw();
-		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
 		void UpdateState(TouchPoint_t pos);
-		void AddArgs(int16_t event, uint16_t n, void *arg);
+
+		void setValue(String newString);
+		void setValue(uint32_t newValue);
 
 	private:
-		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
-		void (*_released_cb)(gui_args_vector_t& args) = NULL;
-		gui_args_vector_t _pressed_cb_args;
-		gui_args_vector_t _released_cb_args;
-		int16_t _state = EVENT_NONE;
+		gui_args_vector_t _cb_args;
 		String _label;
-		HotZone *_buttonZone;
+		String _content;
+		String _contentOrig;
 };
 
 #endif
