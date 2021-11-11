@@ -2,7 +2,7 @@
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Settings
+* Frame: SysInfo
 *******************************************************************************/
 
 /******************************************************************************
@@ -11,7 +11,9 @@
 #include <M5Core2.h>
 
 #include "main.h"
-#include "frame_settings.h"
+#include "frame_sysinfo.h"
+
+#define STRINGSIZE	100
 
 /******************************************************************************
 * Global Variables
@@ -24,63 +26,33 @@
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void but_changeVal(gui_args_vector_t &args)
+Frame_SysInfo::Frame_SysInfo(void)
 {
-	GUI_String *_but = NULL;
+	_frame_name = "Frame_SysInfo";
 
-	_but = (GUI_String *)(args[0]);
-	_but->setValue("Hallo");
-
-	_but = (GUI_String *)(args[1]);
-	_but->setValue(random(9999));
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void but_exit(gui_args_vector_t &args)
-{
-	GUI_PopFrame();
-	*((int *)(args[0])) = 0;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-Frame_Settings::Frame_Settings(void)
-{
-	_frame_name = "Frame_Settings";
-
-	// create String-Field and Number-Field
-	_string[0] = new GUI_String("Text:", "Text", 320 - 200 - 16, (1 * (32 + 8)) + 48 + 16, 200, 24);
-	_string[1] = new GUI_String("Number:", 1234, 320 - 200 - 16, (2 * (32 + 8)) + 48 + 16, 200, 24);
-
-	// create Button
-	_button[0] = new GUI_Button("Change Values", 16, (0 * (32 + 8)) + 48 + 16, 320 - (2 * 16), 32);
-	_button[0]->AddArgs(GUI_Button::EVENT_RELEASED, 0, _string[0]);
-	_button[0]->AddArgs(GUI_Button::EVENT_RELEASED, 1, _string[1]);
-	_button[0]->Bind(GUI_Button::EVENT_RELEASED, &but_changeVal);
-
-	_button[1] = new GUI_Button("Exit", 16, (3 * (32 + 8)) + 48 + 16, 320 - (2 * 16), 32);
-	_button[1]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_button[1]->Bind(GUI_Button::EVENT_RELEASED, &but_exit);
+	_string[0] = new GUI_String("Flash-Size:", ESP.getFlashChipSize(), 320 - STRINGSIZE - 16, (0 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
+	_string[1] = new GUI_String("Flash-Speed (MHz):", ESP.getFlashChipSpeed() / 1000000, 320 - STRINGSIZE - 16, (1 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
+	_string[2] = new GUI_String("Heap:", ESP.getHeapSize(), 320 - STRINGSIZE - 16, (2 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
+	_string[3] = new GUI_String("Free Heap:", ESP.getFreeHeap(), 320 - STRINGSIZE - 16, (3 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
+	_string[4] = new GUI_String("Free PSRAM:", ESP.getFreePsram(), 320 - STRINGSIZE - 16, (4 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
+	_string[5] = new GUI_String("Min.Heap:", esp_get_minimum_free_heap_size(), 320 - STRINGSIZE - 16, (5 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
 
 	exitbtn();
 	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
 	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
 }
-
+	
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-Frame_Settings::~Frame_Settings(void)
+Frame_SysInfo::~Frame_SysInfo(void)
 {
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-int Frame_Settings::init(gui_args_vector_t &args)
+int Frame_SysInfo::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
 
@@ -92,13 +64,10 @@ int Frame_Settings::init(gui_args_vector_t &args)
 	// Bevelbox
 	bevel(8, 56, 320 - (2 * 8), 240 - (2 * 24) - (2 * 8), BT_RECESSED);
 
-	for (uint8_t i = 0; i < 2; i++)
+	for (uint8_t i = 0; i < 6; i++)
 	{
 		GUI_AddObject(_string[i]);
 		_string[i]->init();
-
-		GUI_AddObject(_button[i]);
-		_button[i]->init();
 	}
 
 	GUI_AddObject(_key_exit);

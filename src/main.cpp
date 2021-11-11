@@ -67,13 +67,47 @@ void setup()
 	GUI_PushFrame(frame_main);
 
 #ifdef BOARD_HAS_PSRAM
-	Serial.println(ESP.getHeapSize());
-	Serial.println(ESP.getFreeHeap());
-
 	//if (ESP.getPsramSize() > 0)
 	//	Serial.println(ESP.getPsramSize());
 
+	Serial.print("getCpuFreqMhz() = ");
+	Serial.println(ESP.getCpuFreqMHz());
+
+	Serial.println("Cores: 2");
+
+	Serial.print("getChipRevision() = ");
+	Serial.println(ESP.getChipRevision());
+
+	Serial.print("getFlashChipSpeed()");
+	Serial.println(ESP.getFlashChipSpeed());
+
+	Serial.print("getHeapSize() - ");
+	Serial.println(ESP.getFreeHeap());
+
+	Serial.print("getFreeHeap() = ");
+	Serial.println(ESP.getFreeHeap());
+
+	Serial.print("getFreePsram() - ");
 	Serial.println(ESP.getFreePsram());
+
+	Serial.println("getWifiMac - not implemented yet");
+	Serial.println("localIP - not impleneted yet");
+	Serial.println("Wifi-Mode - not implemented yet");
+
+	Serial.print("get_minimum_free_heap_size() - ");
+	Serial.println(esp_get_minimum_free_heap_size());
+
+	Serial.print("getFlashChipSize() - ");
+	Serial.println(ESP.getFlashChipSize());
+
+	Serial.print("SPIFFS-Size - ");
+	Serial.println(SPIFFS.totalBytes());
+
+	Serial.print("SPIFFS Used - ");
+	Serial.println(SPIFFS.usedBytes());
+
+	//Serial.print("SD-Type - ");
+	//Serial.println(SD_Type[type]);
 #endif
 
 }

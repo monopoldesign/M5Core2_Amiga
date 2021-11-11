@@ -1,11 +1,11 @@
-#ifndef _FRAME_SETTINGS_H_
-#define _FRAME_SETTINGS_H_
+#ifndef _FRAME_SYSINFO_H_
+#define _FRAME_SYSINFO_H_
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Settings
+* Frame: SysInfo
 *******************************************************************************/
 
 /******************************************************************************
@@ -17,16 +17,15 @@
 /******************************************************************************
 * Class Definition
 *******************************************************************************/
-class Frame_Settings : public Frame_Base
+class Frame_SysInfo : public Frame_Base
 {
 	public:
-		Frame_Settings();
-		~Frame_Settings();
+		Frame_SysInfo();
+		~Frame_SysInfo();
 		int init(gui_args_vector_t &args);
 
 	private:
-		GUI_Button *_button[2];
-		GUI_String *_string[2];
+		GUI_String *_string[6];
 };
 
 #endif

@@ -14,6 +14,7 @@
 #include "frame_main.h"
 #include "frame_settings.h"
 #include "frame_gfxdemo.h"
+#include "frame_sysinfo.h"
 
 /******************************************************************************
 * Functions
@@ -46,6 +47,22 @@ void key_app1_cb(gui_args_vector_t &args)
 	{
 		frame = new Frame_GfxDemo();
 		GUI_AddFrame("Frame_GfxDemo", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void key_app2_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_SysInfo");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_SysInfo();
+		GUI_AddFrame("Frame_SysInfo", frame);
 	}
 	GUI_PushFrame(frame);
 	*((int*)(args[0])) = 0;
@@ -111,6 +128,9 @@ Frame_Main::Frame_Main(void): Frame_Base(false)
 
 	_key[1]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[1]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app1_cb);
+
+	_key[2]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[2]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app2_cb);
 
 	_time = 0;
 	_next_update_time = 0;
