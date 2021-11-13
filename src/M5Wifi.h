@@ -1,8 +1,11 @@
+#ifndef _M5WIFI_H_
+#define _M5WIFI_H_
+
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Main-Program
+* Wifi-Functions
 *******************************************************************************/
 
 // Comment templates
@@ -20,30 +23,25 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include <Arduino.h>
-#include <LinkedList.h>
+#include <WiFi.h>
 
 /******************************************************************************
 * Prototypes
 *******************************************************************************/
-bool InitI2SSpeakerOrMic(int mode);
-void i2s_task(void *arg);
+void m5wifi_initWifi(void);
 
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-#define CONFIG_I2S_BCK_PIN 12
-#define CONFIG_I2S_LRCK_PIN 0
-#define CONFIG_I2S_DATA_PIN 2
-#define CONFIG_I2S_DATA_IN_PIN 34
-
-#define Speak_I2S_NUMBER I2S_NUM_0
-#define MODE_MIC 0
-#define MODE_SPK 1
+class wifiNetwork
+{
+	public:
+		char ssid[32];
+		char pwd[32];
+};
 
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
-extern const unsigned char previewR[120264];
 
-extern char buffer[16];
+#endif

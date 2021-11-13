@@ -24,8 +24,14 @@
 #include <driver/i2s.h>
 
 #include "main.h"
+#include "M5Settings.h"
+#include "M5Wifi.h"
 #include "gui/gui.h"
 #include "frame/frame.h"
+
+/******************************************************************************
+* Definitions
+*******************************************************************************/
 
 /******************************************************************************
 * Global Variables
@@ -43,6 +49,14 @@ void setup()
 {
 	Serial.begin(115200);
 
+	m5set_initSettings();
+
+	if (!SPIFFS.begin())
+	{
+		Serial.println("Failed to open SPIFFS");
+		return;
+	}
+
 	M5.begin(true, false, true, false);
 
 	M5.Axp.SetLed(0);
@@ -50,6 +64,9 @@ void setup()
 	M5.Axp.SetSpkEnable(true);
 	InitI2SSpeakerOrMic(MODE_SPK);
 	xTaskCreatePinnedToCore(i2s_task, "i2s_task", 4096, NULL, 3, NULL, 0);
+
+	//M5.Lcd.drawJpgFile(SPIFFS, "/First.jpg", 0, 0, 320, 214);
+	//delay(5000);
 
 	M5.Axp.SetLed(1);
 
@@ -63,53 +80,14 @@ void setup()
 	M5.Lcd.setCursor(8, 15);
 	M5.Lcd.println("Amiga Workbench");
 
+	//m5set_createSettings();
+	//m5set_saveSettings();
+	m5set_loadSettings();
+
+	m5wifi_initWifi();
+
 	Frame_Main *frame_main = new Frame_Main();
 	GUI_PushFrame(frame_main);
-
-#ifdef BOARD_HAS_PSRAM
-	//if (ESP.getPsramSize() > 0)
-	//	Serial.println(ESP.getPsramSize());
-
-	Serial.print("getCpuFreqMhz() = ");
-	Serial.println(ESP.getCpuFreqMHz());
-
-	Serial.println("Cores: 2");
-
-	Serial.print("getChipRevision() = ");
-	Serial.println(ESP.getChipRevision());
-
-	Serial.print("getFlashChipSpeed()");
-	Serial.println(ESP.getFlashChipSpeed());
-
-	Serial.print("getHeapSize() - ");
-	Serial.println(ESP.getFreeHeap());
-
-	Serial.print("getFreeHeap() = ");
-	Serial.println(ESP.getFreeHeap());
-
-	Serial.print("getFreePsram() - ");
-	Serial.println(ESP.getFreePsram());
-
-	Serial.println("getWifiMac - not implemented yet");
-	Serial.println("localIP - not impleneted yet");
-	Serial.println("Wifi-Mode - not implemented yet");
-
-	Serial.print("get_minimum_free_heap_size() - ");
-	Serial.println(esp_get_minimum_free_heap_size());
-
-	Serial.print("getFlashChipSize() - ");
-	Serial.println(ESP.getFlashChipSize());
-
-	Serial.print("SPIFFS-Size - ");
-	Serial.println(SPIFFS.totalBytes());
-
-	Serial.print("SPIFFS Used - ");
-	Serial.println(SPIFFS.usedBytes());
-
-	//Serial.print("SD-Type - ");
-	//Serial.println(SD_Type[type]);
-#endif
-
 }
 
 /*------------------------------------------------------------------------------

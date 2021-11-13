@@ -207,6 +207,8 @@ void Frame_Main::AppName()
 ------------------------------------------------------------------------------*/
 void Frame_Main::StatusBar()
 {
+	if (globalSettings->wifiConnected)
+		M5.Lcd.drawBitmap(274, 0, 22, 22, wifi_22x22);
 }
 
 /*------------------------------------------------------------------------------
@@ -235,7 +237,7 @@ int Frame_Main::init(gui_args_vector_t &args)
 	_time = 0;
 	_next_update_time = 0;
 
-	//StatusBar();
+	StatusBar();
 	AppName();
 	return 9;
 }

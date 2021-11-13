@@ -1,8 +1,11 @@
+#ifndef _M5SETTINGS_H_
+#define _M5SETTINGS_H_
+
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Main-Program
+* Settings-Functions
 *******************************************************************************/
 
 // Comment templates
@@ -21,29 +24,35 @@
 * Header-Files
 *******************************************************************************/
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <LinkedList.h>
+#include <SPIFFS.h>
+
+#include "M5Wifi.h"
 
 /******************************************************************************
 * Prototypes
 *******************************************************************************/
-bool InitI2SSpeakerOrMic(int mode);
-void i2s_task(void *arg);
+void m5set_initSettings(void);
+void m5set_createSettings(void);
+void m5set_saveSettings(void);
+void m5set_loadSettings(void);
+void m5set_clearSettings(void);
+void m5set_printWifiList(void);
 
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-#define CONFIG_I2S_BCK_PIN 12
-#define CONFIG_I2S_LRCK_PIN 0
-#define CONFIG_I2S_DATA_PIN 2
-#define CONFIG_I2S_DATA_IN_PIN 34
-
-#define Speak_I2S_NUMBER I2S_NUM_0
-#define MODE_MIC 0
-#define MODE_SPK 1
+struct Settings
+{
+	char wifiSsid[32];
+	char wifiPwd[32];
+	boolean wifiConnected;
+};
 
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
-extern const unsigned char previewR[120264];
+extern struct Settings *globalSettings;
 
-extern char buffer[16];
+#endif

@@ -2,7 +2,7 @@
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Main-Program
+* Wifi-Functions
 *******************************************************************************/
 
 // Comment templates
@@ -20,30 +20,39 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include <Arduino.h>
-#include <LinkedList.h>
+#include "main.h"
+#include "M5Settings.h"
+#include "M5Wifi.h"
 
 /******************************************************************************
-* Prototypes
+* Functions
 *******************************************************************************/
-bool InitI2SSpeakerOrMic(int mode);
-void i2s_task(void *arg);
 
-/******************************************************************************
-* Definitions
-*******************************************************************************/
-#define CONFIG_I2S_BCK_PIN 12
-#define CONFIG_I2S_LRCK_PIN 0
-#define CONFIG_I2S_DATA_PIN 2
-#define CONFIG_I2S_DATA_IN_PIN 34
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5wifi_initWifi(void)
+{
+	WiFi.mode(WIFI_STA);
+	WiFi.begin(globalSettings->wifiSsid, globalSettings->wifiPwd);
 
-#define Speak_I2S_NUMBER I2S_NUM_0
-#define MODE_MIC 0
-#define MODE_SPK 1
+	uint32_t _time = millis();
 
-/******************************************************************************
-* Global Variables
-*******************************************************************************/
-extern const unsigned char previewR[120264];
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		if (millis() - _time > 10000)
+			break;
 
-extern char buffer[16];
+		Serial.print(".");
+		delay(1000);
+	}
+
+	Serial.println();
+
+	if (WiFi.status() == WL_CONNECTED)
+	{
+		globalSettings->wifiConnected = true;
+		Serial.print("IP: ");
+		Serial.println(WiFi.localIP());
+	}
+}
