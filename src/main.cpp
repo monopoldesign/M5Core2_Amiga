@@ -84,6 +84,7 @@ void setup()
 	//m5set_saveSettings();
 	m5set_loadSettings();
 
+	m5wifi_scanWifi();
 	m5wifi_initWifi();
 
 	Frame_Main *frame_main = new Frame_Main();

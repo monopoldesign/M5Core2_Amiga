@@ -16,6 +16,14 @@
 #include "frame_gfxdemo.h"
 #include "frame_sysinfo.h"
 
+const unsigned short *wifiLevel[4] =
+{
+	wifi1_22x22,
+	wifi2_22x22,
+	wifi3_22x22,
+	wifi4_22x22
+};
+
 /******************************************************************************
 * Functions
 *******************************************************************************/
@@ -208,7 +216,19 @@ void Frame_Main::AppName()
 void Frame_Main::StatusBar()
 {
 	if (globalSettings->wifiConnected)
-		M5.Lcd.drawBitmap(274, 0, 22, 22, wifi_22x22);
+	{
+		uint8_t level = 0;
+		int8_t rssi = WiFi.RSSI();
+
+		if (rssi > -55)
+			level = 3;
+		else if (rssi > -88)
+			level = 2;
+		else
+			level = 1;
+
+		M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[level]);
+	}
 }
 
 /*------------------------------------------------------------------------------

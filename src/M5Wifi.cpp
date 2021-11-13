@@ -56,3 +56,23 @@ void m5wifi_initWifi(void)
 		Serial.println(WiFi.localIP());
 	}
 }
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5wifi_scanWifi(void)
+{
+	uint8_t n = WiFi.scanNetworks();
+
+	for (uint8_t i = 0; i < n; i++)
+	{
+		Serial.print(i + 1);
+		Serial.print(": ");
+		Serial.print(WiFi.SSID(i));
+		Serial.print(" (");
+		Serial.print(WiFi.RSSI(i));
+		Serial.print(")");
+		Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " " : "*");
+		delay(10);
+	}
+}
