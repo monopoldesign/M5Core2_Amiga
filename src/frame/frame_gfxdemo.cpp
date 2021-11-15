@@ -64,6 +64,8 @@ int Frame_GfxDemo::init(gui_args_vector_t &args)
 ------------------------------------------------------------------------------*/
 int Frame_GfxDemo::run()
 {
+	Frame_Base::run();
+
 	// Gfx-Demo
 	M5.Lcd.fillRect(10, 50, 300, 180, M5.Lcd.color565(149, 149, 149));
 

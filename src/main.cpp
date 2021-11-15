@@ -59,8 +59,6 @@ void setup()
 
 	M5.begin(true, false, true, false);
 
-	M5.Axp.SetLed(0);
-
 	M5.Axp.SetSpkEnable(true);
 	InitI2SSpeakerOrMic(MODE_SPK);
 	xTaskCreatePinnedToCore(i2s_task, "i2s_task", 4096, NULL, 3, NULL, 0);
@@ -68,24 +66,18 @@ void setup()
 	//M5.Lcd.drawJpgFile(SPIFFS, "/First.jpg", 0, 0, 320, 214);
 	//delay(5000);
 
-	M5.Axp.SetLed(1);
+	M5.Axp.SetLed(0);
 
 	M5.Lcd.clear(M5.Lcd.color565(149, 149, 149));
-	M5.Lcd.drawBitmap(0, 0, 320, 24, titlebar);
-
-	M5.Lcd.setFreeFont(&FreeSans9pt7b);
-	M5.Lcd.setTextSize(1);
-	M5.Lcd.setTextColor(BLACK);
-
-	M5.Lcd.setCursor(8, 15);
-	M5.Lcd.println("Amiga Workbench");
 
 	//m5set_createSettings();
 	//m5set_saveSettings();
 	m5set_loadSettings();
 
-	m5wifi_scanWifi();
+	//m5wifi_scanWifi();
 	m5wifi_initWifi();
+
+	m5wifi_getNTPTime();
 
 	Frame_Main *frame_main = new Frame_Main();
 	GUI_PushFrame(frame_main);

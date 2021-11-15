@@ -47,7 +47,9 @@ struct Settings
 {
 	char wifiSsid[32];
 	char wifiPwd[32];
-	boolean wifiConnected;
+	boolean isWifiConnected;
+	boolean isNTPTime;
+	uint8_t hour, mins;
 };
 
 /******************************************************************************

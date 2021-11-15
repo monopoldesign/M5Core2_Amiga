@@ -11,18 +11,11 @@
 #include "main.h"
 #include "../gui/gui.h"
 
+#include "M5Wifi.h"
 #include "frame_main.h"
 #include "frame_settings.h"
 #include "frame_gfxdemo.h"
 #include "frame_sysinfo.h"
-
-const unsigned short *wifiLevel[4] =
-{
-	wifi1_22x22,
-	wifi2_22x22,
-	wifi3_22x22,
-	wifi4_22x22
-};
 
 /******************************************************************************
 * Functions
@@ -79,7 +72,7 @@ void key_app2_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-Frame_Main::Frame_Main(void): Frame_Base(false)
+Frame_Main::Frame_Main(void): Frame_Base()
 {
 	_frame_name = "Frame_Main";
 	_frame_id = 1;
@@ -140,8 +133,14 @@ Frame_Main::Frame_Main(void): Frame_Base(false)
 	_key[2]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[2]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app2_cb);
 
-	_time = 0;
-	_next_update_time = 0;
+	_time = millis();
+
+	if (globalSettings->isNTPTime)
+	{
+		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+		M5.Lcd.setCursor(220, 16);
+		M5.Lcd.print(buffer);
+	}
 }
 
 /*------------------------------------------------------------------------------
@@ -213,40 +212,11 @@ void Frame_Main::AppName()
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void Frame_Main::StatusBar()
-{
-	if (globalSettings->wifiConnected)
-	{
-		uint8_t level = 0;
-		int8_t rssi = WiFi.RSSI();
-
-		if (rssi > -55)
-			level = 3;
-		else if (rssi > -88)
-			level = 2;
-		else
-			level = 1;
-
-		M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[level]);
-	}
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
 int Frame_Main::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
 
-	M5.Lcd.clear(M5.Lcd.color565(149, 149, 149));
-	M5.Lcd.drawBitmap(0, 0, 320, 24, titlebar);
-
-	M5.Lcd.setFreeFont(&FreeSans9pt7b);
-	M5.Lcd.setTextSize(1);
-	M5.Lcd.setTextColor(BLACK);
-
-	M5.Lcd.setCursor(8, 15);
-	M5.Lcd.println("Amiga Workbench");
+	Frame_Base::init_StatusBar();
 
 	for (uint8_t i = 0; i < MAX_APPS; i++)
 	{
@@ -254,10 +224,15 @@ int Frame_Main::init(gui_args_vector_t &args)
 		_key[i]->init();
 	}
 
-	_time = 0;
-	_next_update_time = 0;
+	_time = millis();
 
-	StatusBar();
+	if (globalSettings->isNTPTime)
+	{
+		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
+		M5.Lcd.setCursor(220, 16);
+		M5.Lcd.print(buffer);
+	}
+
 	AppName();
 	return 9;
 }
@@ -268,6 +243,5 @@ int Frame_Main::init(gui_args_vector_t &args)
 int Frame_Main::run()
 {
 	Frame_Base::run();
-	//StatusBar();
 	return 1;
 }

@@ -41,6 +41,15 @@ void i2s_task(void *arg);
 #define MODE_MIC 0
 #define MODE_SPK 1
 
+#define MWB_GRAY	0x9492
+#define MWB_BLACK	0x0000
+#define MWB_WHITE	0xFFFF
+#define MWB_BLUE	0x3B33
+#define MWB_GRAY2	0x73CE
+#define MWB_GRAY3	0xAD75
+#define MWB_BROWN	0xA46F
+#define MWB_PINK	0xFD32
+
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
