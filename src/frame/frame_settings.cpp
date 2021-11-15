@@ -64,10 +64,6 @@ Frame_Settings::Frame_Settings(void)
 	_button[1] = new GUI_Button("Exit", 16, (3 * (32 + 8)) + 48 + 16, 320 - (2 * 16), 32);
 	_button[1]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
 	_button[1]->Bind(GUI_Button::EVENT_RELEASED, &but_exit);
-
-	exitbtn();
-	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
 }
 
 /*------------------------------------------------------------------------------
@@ -84,10 +80,8 @@ int Frame_Settings::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
 
-	M5.Lcd.drawBitmap(0, 24, 320, 216, Window);
-
-	M5.Lcd.setCursor(24 + 8, 41);
-	M5.Lcd.println(_frame_name);
+	// Window
+	openWindow(0, 24, 320, 216, _frame_name);
 
 	// Bevelbox
 	bevel(8, 56, 320 - (2 * 8), 240 - (2 * 24) - (2 * 8), BT_RECESSED);
@@ -100,9 +94,6 @@ int Frame_Settings::init(gui_args_vector_t &args)
 		GUI_AddObject(_button[i]);
 		_button[i]->init();
 	}
-
-	GUI_AddObject(_key_exit);
-	_key_exit->init();
 
 	return 3;
 }

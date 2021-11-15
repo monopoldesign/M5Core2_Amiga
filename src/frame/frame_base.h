@@ -32,7 +32,7 @@ class Frame_Base
 
 		void exitbtn();
 		void bevel(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t type);
-		void openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const String &title);
+		void openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, String title, boolean active = true);
 
 		virtual int run();
 		virtual void exit();
@@ -51,6 +51,8 @@ class Frame_Base
 		GUI_ImgButton *_key_exit = NULL;
 		uint32_t _frame_id;
 		uint32_t _time;
+		uint16_t _winX, _winY, _winW, _winH;
+		String _title;
 
 	private:
 };

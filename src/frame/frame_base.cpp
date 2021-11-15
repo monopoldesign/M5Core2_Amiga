@@ -81,9 +81,54 @@ void Frame_Base::bevel(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t t
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void Frame_Base::openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, const String &title)
+void Frame_Base::openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, String title, boolean active)
 {
+	_winX = x;
+	_winY = y;
+	_winW = w;
+	_winH = h;
+	_title = title;
 
+	//M5.Lcd.drawBitmap(_winX, _winY, _winW, _winH, Window);
+
+	// Window-Fill
+	if (active)
+		M5.Lcd.fillRect(_winX, _winY, _winW, _winH, MWB_BLUE);
+	else
+		M5.Lcd.fillRect(_winX, _winY, _winW, _winH, MWB_GRAY);
+
+	// Window-Bevel
+	M5.Lcd.drawRect(_winX, _winY, _winW, _winH, MWB_BLACK);
+	M5.Lcd.drawLine(_winX, _winY, _winX + _winW, _winY, MWB_WHITE);
+	M5.Lcd.drawLine(_winX, _winY, _winX, _winY + _winH, MWB_WHITE);
+
+	// Window-Inner-Fill
+	M5.Lcd.fillRect(_winX + 4, _winY + 24, _winW - (2 * 4), _winH - 24 - 2, MWB_GRAY);
+	M5.Lcd.drawRect(_winX + 4, _winY + 24, _winW - (2 * 4), _winH - 24 - 2, MWB_WHITE);
+	M5.Lcd.drawLine(_winX + 4, _winY + 24, _winW - (2 * 4), _winY + 24, MWB_BLACK);
+	M5.Lcd.drawLine(_winX + 4, _winY + 24, _winX + 4, _winY - 24 - 2, MWB_BLACK);
+
+	// Depth-Gadget
+	M5.Lcd.drawRect(_winX + _winW - 24, _winY, 24, 24 + 1, MWB_BLACK);
+	M5.Lcd.drawLine(_winX + _winW - 24, _winY, _winX + _winW, _winY, MWB_WHITE);
+	M5.Lcd.drawLine(_winX + _winW - 24, _winY, _winX + _winW - 24, _winY + 24 - 1, MWB_WHITE);
+	M5.Lcd.drawLine(_winX + _winW - 24 - 1, _winY + 1, _winX + _winW - 24 - 1, _winY + 24 - 1, MWB_BLACK);
+
+	// Gadget-Content
+	M5.Lcd.fillRect((_winX + _winW - 24) + 5, _winY + 5, 12, 10, MWB_GRAY);
+	M5.Lcd.drawRect((_winX + _winW - 24) + 5, _winY + 5, 12, 10, MWB_BLACK);
+	M5.Lcd.fillRect((_winX + _winW - 24) + 8, _winY + 8, 12, 10, MWB_WHITE);
+	M5.Lcd.drawRect((_winX + _winW - 24) + 8, _winY + 8, 12, 10, MWB_BLACK);
+
+	M5.Lcd.setCursor(_winX + 24 + 8, _winY + 17);
+	M5.Lcd.println(title);
+
+	exitbtn();
+	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
+	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &exit_cb);
+
+	GUI_AddObject(_key_exit);
+	_key_exit->init();
 }
 
 /*------------------------------------------------------------------------------
@@ -168,9 +213,9 @@ void Frame_Base::init_StatusBar()
 	M5.Lcd.fillRect(320 - 23, 0, 23, 23, M5.Lcd.color565(149, 149, 149));
 
 	// Gadget-Content
-	M5.Lcd.drawRect((320 - 23) + 4, 4, 12, 10, BLACK);
-	M5.Lcd.drawRect((320 - 23) + 7, 7, 12, 10, BLACK);
-	M5.Lcd.fillRect((320 - 23) + 8, 8, 10, 8, WHITE);
+	M5.Lcd.drawRect((320 - 23) + 5, 5, 12, 10, BLACK);
+	M5.Lcd.drawRect((320 - 23) + 8, 8, 12, 10, BLACK);
+	M5.Lcd.fillRect((320 - 23) + 9, 9, 10, 8, WHITE);
 
 	// Title-Bar-Text
 	M5.Lcd.setFreeFont(&FreeSans9pt7b);

@@ -56,10 +56,8 @@ int Frame_SysInfo::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
 
-	M5.Lcd.drawBitmap(0, 24, 320, 216, Window);
-
-	M5.Lcd.setCursor(24 + 8, 41);
-	M5.Lcd.println(_frame_name);
+	// Window
+	openWindow(0, 24, 320, 216, _frame_name);
 
 	// Bevelbox
 	bevel(8, 56, 320 - (2 * 8), 240 - (2 * 24) - (2 * 8), BT_RECESSED);
@@ -69,9 +67,6 @@ int Frame_SysInfo::init(gui_args_vector_t &args)
 		GUI_AddObject(_string[i]);
 		_string[i]->init();
 	}
-
-	GUI_AddObject(_key_exit);
-	_key_exit->init();
 
 	return 3;
 }
