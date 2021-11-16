@@ -24,6 +24,7 @@
 #include <driver/i2s.h>
 
 #include "main.h"
+#include "M5RTC.h"
 #include "M5Settings.h"
 #include "M5Wifi.h"
 #include "gui/gui.h"
@@ -91,9 +92,8 @@ void setup()
 	}
 	else
 	{
+		m5rtc_getTime();
 		Serial.println("Couldn't connect to WiFi!");
-		globalSettings->hour = 0;
-		globalSettings->hour = 0;
 	}
 
 	Frame_Main *frame_main = new Frame_Main();

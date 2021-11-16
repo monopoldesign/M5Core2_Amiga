@@ -1,11 +1,8 @@
-#ifndef _M5WIFI_H_
-#define _M5WIFI_H_
-
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Wifi-Functions
+* RTC-Functions
 *******************************************************************************/
 
 // Comment templates
@@ -23,46 +20,43 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include <LinkedList.h>
-#include <WiFi.h>
+#include <M5Core2.h>
 
-/******************************************************************************
-* Prototypes
-*******************************************************************************/
-void m5wifi_initWifi(void);
-
-void m5wifi_scanWifi(void);
-void m5wifi_printWifiList(void);
-void m5wifi_clearWifiList(void);
-void m5wifi_findWifi(void);
-uint8_t m5wifi_setWifi();
-
-void m5wifi_getNTPTime(void);
-void m5wifi_printLocalTime();
-
-/******************************************************************************
-* Definitions
-*******************************************************************************/
-class savedWifiNetwork
-{
-	public:
-		char ssid[32];
-		char pwd[32];
-};
-
-class wifiNetwork
-{
-	public:
-		boolean isSaved;
-		char ssid[32];
-		char pwd[32];
-		int32_t rssi;
-};
+#include "M5RTC.h"
+#include "M5Settings.h"
 
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
-extern struct tm timeinfo;
-extern LinkedList<wifiNetwork *> wifiNetworkList;
+RTC_TimeTypeDef RTCtime;
+RTC_DateTypeDef RTCDate;
 
-#endif
+/******************************************************************************
+* Functions
+*******************************************************************************/
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5rtc_setupTime(void)
+{
+	RTCtime.Hours = timeinfo.tm_hour;
+	RTCtime.Minutes = timeinfo.tm_min;
+	RTCtime.Seconds = timeinfo.tm_sec;
+	M5.Rtc.SetTime(&RTCtime);
+
+	RTCDate.Year = timeinfo.tm_year;
+	RTCDate.Month = timeinfo.tm_mon;
+	RTCDate.Date = timeinfo.tm_mday;
+	M5.Rtc.SetDate(&RTCDate);
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5rtc_getTime(void)
+{
+	M5.Rtc.GetTime(&RTCtime);
+	globalSettings->hour = RTCtime.Hours;
+	globalSettings->mins = RTCtime.Minutes;
+}
