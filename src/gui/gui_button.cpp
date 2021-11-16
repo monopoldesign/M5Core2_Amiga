@@ -18,13 +18,14 @@
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-GUI_Button::GUI_Button(int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
+GUI_Button::GUI_Button(uint8_t type, int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
 {
 	_x = x;
 	_y = y;
 	_w = w;
 	_h = h;
 
+	_type = type;
 	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
 }
 
@@ -40,6 +41,7 @@ GUI_Button::GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h)
 	_w = w;
 	_h = h;
 
+	_type = BUT_NORMAL;
 	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
 }
 
@@ -68,40 +70,70 @@ void GUI_Button::Draw()
 
 	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
 	{
-		M5.Lcd.fillRect(_x, _y, _w, _h, M5.Lcd.color565(149, 149, 149));
-		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, WHITE);
-		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, WHITE);
-		M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, BLACK);
-		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, BLACK);
-
-		if (_label.length() > 0)
+		if (_type == BUT_CLOSEW)
 		{
-			M5.Lcd.setFreeFont(&FreeSans9pt7b);
-			M5.Lcd.setTextSize(1);
-			M5.Lcd.setTextColor(BLACK);
+			// Gadget
+			M5.Lcd.drawRect(_x, _y, _w, _h, MWB_BLACK);
+			M5.Lcd.drawLine(_x, _y, _x + _w, _y, MWB_WHITE);
+			M5.Lcd.drawLine(_x, _y, _x, _y + _h, MWB_WHITE);
+			M5.Lcd.drawLine(_x + _w, _y, _x + _w, _y + _h - 2, MWB_WHITE);
 
-			uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-			M5.Lcd.setCursor(xtext, _y + 22);
-			M5.Lcd.print(_label);
+			// Symbol
+			M5.Lcd.fillRect(_x + 8, _y + 7, 10, 12, MWB_WHITE);
+			M5.Lcd.drawRect(_x + 8, _y + 7, 10, 12, MWB_BLACK);
+		}
+		else
+		{
+			M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+			M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
+			M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
+			M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+			M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+			
+			if (_label.length() > 0)
+			{
+				M5.Lcd.setFreeFont(&FreeSans9pt7b);
+				M5.Lcd.setTextSize(1);
+				M5.Lcd.setTextColor(MWB_BLACK);
+			
+				uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
+				M5.Lcd.setCursor(xtext, _y + 22);
+				M5.Lcd.print(_label);
+			}
 		}
 	}
 	else if (_state == EVENT_PRESSED)
 	{
-		M5.Lcd.fillRect(_x, _y, _w, _h, M5.Lcd.color565(149, 149, 149));
-		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, BLACK);
-		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, BLACK);
-		M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, WHITE);
-		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, WHITE);
-
-		if (_label.length() > 0)
+		if (_type == BUT_CLOSEW)
 		{
-			M5.Lcd.setFreeFont(&FreeSans9pt7b);
-			M5.Lcd.setTextSize(1);
-			M5.Lcd.setTextColor(BLACK);
+			// Gadget
+			M5.Lcd.drawRect(_x, _y, _w, _h, MWB_WHITE);
+			M5.Lcd.drawLine(_x, _y, _x + _w, _y, MWB_BLACK);
+			M5.Lcd.drawLine(_x, _y, _x, _y + _h, MWB_BLACK);
+			M5.Lcd.drawLine(_x + _w, _y, _x + _w, _y + _h - 2, MWB_WHITE);
 
-			uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-			M5.Lcd.setCursor(xtext + 2, _y + 22 + 2);
-			M5.Lcd.print(_label);
+			// Symbol
+			M5.Lcd.fillRect(_x + 8, _y + 7, 10, 12, MWB_GRAY);
+			M5.Lcd.drawRect(_x + 8, _y + 7, 10, 12, MWB_BLACK);
+		}
+		else
+		{
+			M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+			M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+			M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
+			M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+			M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+
+			if (_label.length() > 0)
+			{
+				M5.Lcd.setFreeFont(&FreeSans9pt7b);
+				M5.Lcd.setTextSize(1);
+				M5.Lcd.setTextColor(MWB_BLACK);
+
+				uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
+				M5.Lcd.setCursor(xtext + 2, _y + 22 + 2);
+				M5.Lcd.print(_label);
+			}
 		}
 	}
 }

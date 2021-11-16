@@ -52,10 +52,10 @@ void m5set_createSettings(void)
 	for (uint8_t i = 0; i < 2; i++)
 	{
 		_wn = new wifiNetwork();
-		//sprintf(_wn->ssid, "NSA-Surveillance");
-		//sprintf(_wn->pwd, "laganas.2017");
-		sprintf(_wn->ssid, "Mario's iOS");
-		sprintf(_wn->pwd, "xtesta.0815");
+		sprintf(_wn->ssid, "NSA-Surveillance");
+		sprintf(_wn->pwd, "laganas.2017");
+		//sprintf(_wn->ssid, "Mario's iOS");
+		//sprintf(_wn->pwd, "xtesta.0815");
 		WifiNetworkList.add(_wn);
 	}
 

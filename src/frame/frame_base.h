@@ -48,7 +48,7 @@ class Frame_Base
 		static void exit_cb(gui_args_vector_t &args);
 		String _frame_name;
 		int _is_run = 1;
-		GUI_ImgButton *_key_exit = NULL;
+		GUI_Button *_key_exit = NULL;
 		uint32_t _frame_id;
 		uint32_t _time;
 		uint16_t _winX, _winY, _winW, _winH;
