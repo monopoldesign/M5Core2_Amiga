@@ -173,6 +173,7 @@ void Frame_Base::StatusBar()
 
 		if (globalSettings->isWifiConnected)
 		{
+			M5.Axp.SetLed(0);
 			globalSettings->isWifiConnected = false;
 			WiFi.disconnect(true);
 			WiFi.mode(WIFI_OFF);

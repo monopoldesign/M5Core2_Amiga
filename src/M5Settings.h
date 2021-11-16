@@ -38,7 +38,7 @@ void m5set_createSettings(void);
 void m5set_saveSettings(void);
 void m5set_loadSettings(void);
 void m5set_clearSettings(void);
-void m5set_printWifiList(void);
+void m5set_printSavedWifiList(void);
 
 /******************************************************************************
 * Definitions
@@ -56,5 +56,6 @@ struct Settings
 * Global Variables
 *******************************************************************************/
 extern struct Settings *globalSettings;
+extern LinkedList<savedWifiNetwork *> savedWifiNetworkList;
 
 #endif

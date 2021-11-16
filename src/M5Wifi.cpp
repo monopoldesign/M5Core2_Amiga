@@ -20,9 +20,16 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
+#include <M5Core2.h>
+
 #include "main.h"
 #include "M5Settings.h"
 #include "M5Wifi.h"
+
+/******************************************************************************
+* Prototypes
+*******************************************************************************/
+int m5wifi_compare(wifiNetwork *&a, wifiNetwork *&b);
 
 /******************************************************************************
 * Global Variables
@@ -31,6 +38,8 @@ const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 0;
 const int   daylightOffset_sec = 3600;
 struct tm timeinfo;
+
+LinkedList<wifiNetwork *> wifiNetworkList = LinkedList<wifiNetwork *>();
 
 /******************************************************************************
 * Functions
@@ -59,6 +68,7 @@ void m5wifi_initWifi(void)
 
 	if (WiFi.status() == WL_CONNECTED)
 	{
+		M5.Axp.SetLed(1);
 		globalSettings->isWifiConnected = true;
 		Serial.print("IP: ");
 		Serial.println(WiFi.localIP());
@@ -70,19 +80,134 @@ void m5wifi_initWifi(void)
 ------------------------------------------------------------------------------*/
 void m5wifi_scanWifi(void)
 {
+	wifiNetwork *_wn;
+
+	m5wifi_clearWifiList();
 	uint8_t n = WiFi.scanNetworks();
 
 	for (uint8_t i = 0; i < n; i++)
 	{
-		Serial.print(i + 1);
-		Serial.print(": ");
-		Serial.print(WiFi.SSID(i));
-		Serial.print(" (");
-		Serial.print(WiFi.RSSI(i));
-		Serial.print(")");
-		Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN) ? " " : "*");
+		_wn = new wifiNetwork();
+		_wn->isSaved = false;
+		strncpy(_wn->ssid, WiFi.SSID(i).c_str(), sizeof(_wn->ssid));
+		_wn->rssi = WiFi.RSSI(i);
+		wifiNetworkList.add(_wn);
 		delay(10);
 	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5wifi_printWifiList(void)
+{
+	wifiNetwork *_wn;
+
+	if (wifiNetworkList.size() > 0)
+	{
+		for (uint8_t i = 0; i < wifiNetworkList.size(); i++)
+		{
+			_wn = wifiNetworkList.get(i);
+
+			Serial.print(i + 1);
+			Serial.print(": ");
+			Serial.print(_wn->ssid);
+			Serial.print(" (");
+			Serial.print(_wn->rssi);
+			Serial.print(") - ");
+
+			if (_wn->isSaved)
+				Serial.print("saved");
+			else
+				Serial.print("unknown");
+
+			Serial.println();
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5wifi_clearWifiList(void)
+{
+	wifiNetwork *_wn;
+
+	if (wifiNetworkList.size() > 0)
+	{
+		while (wifiNetworkList.size() > 0)
+		{
+			_wn = wifiNetworkList.get(0);
+			wifiNetworkList.remove(0);
+			delete _wn;
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void m5wifi_findWifi(void)
+{
+	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
+
+	if (wifiNetworkList.size() > 0)
+	{
+		for (uint8_t i = 0; i < wifiNetworkList.size(); i++)
+		{
+			_wn = wifiNetworkList.get(i);
+
+			if (savedWifiNetworkList.size() > 0)
+			{
+				for (uint8_t j = 0; j < savedWifiNetworkList.size(); j++)
+				{
+					_swn = savedWifiNetworkList.get(j);
+					if (strcmp(_wn->ssid, _swn->ssid) == 0)
+					{
+						_wn->isSaved = true;
+						strncpy(_wn->pwd, _swn->pwd, sizeof(_wn->pwd));
+					}
+				}
+			}
+		}
+		//wifiNetworkList.sort(m5wifi_compare);
+	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+int m5wifi_compare(wifiNetwork *&a, wifiNetwork *&b)
+{
+	if (a->rssi < b->rssi)
+		return -1;
+	else
+		return 1;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+uint8_t m5wifi_setWifi()
+{
+	wifiNetwork *_wn;
+
+	if (wifiNetworkList.size() > 0)
+	{
+		for (uint8_t i = 0; i < wifiNetworkList.size(); i++)
+		{
+			_wn = wifiNetworkList.get(i);
+
+			if (_wn->isSaved)
+			{
+				strlcpy(globalSettings->wifiSsid, _wn->ssid, sizeof(globalSettings->wifiSsid));
+				strlcpy(globalSettings->wifiPwd, _wn->pwd, sizeof(globalSettings->wifiPwd));
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 /*------------------------------------------------------------------------------

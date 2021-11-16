@@ -74,10 +74,27 @@ void setup()
 	//m5set_saveSettings();
 	m5set_loadSettings();
 
-	//m5wifi_scanWifi();
-	m5wifi_initWifi();
+	m5wifi_scanWifi();
+	m5wifi_findWifi();
+	m5wifi_printWifiList();
 
-	m5wifi_getNTPTime();
+	if (m5wifi_setWifi())
+	{
+		Serial.print("Connecting to: ");
+		Serial.print(globalSettings->wifiSsid);
+		Serial.print(" using Pwd:");
+		Serial.print(globalSettings->wifiPwd);
+		Serial.println();
+
+		m5wifi_initWifi();
+		m5wifi_getNTPTime();
+	}
+	else
+	{
+		Serial.println("Couldn't connect to WiFi!");
+		globalSettings->hour = 0;
+		globalSettings->hour = 0;
+	}
 
 	Frame_Main *frame_main = new Frame_Main();
 	GUI_PushFrame(frame_main);

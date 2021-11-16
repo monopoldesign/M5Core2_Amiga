@@ -29,7 +29,12 @@
 * Prototypes
 *******************************************************************************/
 void m5wifi_initWifi(void);
+
 void m5wifi_scanWifi(void);
+void m5wifi_printWifiList(void);
+void m5wifi_clearWifiList(void);
+void m5wifi_findWifi(void);
+uint8_t m5wifi_setWifi();
 
 void m5wifi_getNTPTime(void);
 void m5wifi_printLocalTime();
@@ -37,16 +42,26 @@ void m5wifi_printLocalTime();
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-class wifiNetwork
+class savedWifiNetwork
 {
 	public:
 		char ssid[32];
 		char pwd[32];
 };
 
+class wifiNetwork
+{
+	public:
+		boolean isSaved;
+		char ssid[32];
+		char pwd[32];
+		int32_t rssi;
+};
+
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
 extern struct tm timeinfo;
+extern LinkedList<wifiNetwork *> wifiNetworkList;
 
 #endif

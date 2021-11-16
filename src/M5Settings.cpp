@@ -26,7 +26,7 @@
 * Global Variables
 *******************************************************************************/
 struct Settings *globalSettings;
-LinkedList<wifiNetwork *> WifiNetworkList = LinkedList<wifiNetwork *>();
+LinkedList<savedWifiNetwork *> savedWifiNetworkList = LinkedList<savedWifiNetwork *>();
 
 /******************************************************************************
 * Functions
@@ -47,20 +47,24 @@ void m5set_initSettings(void)
 ------------------------------------------------------------------------------*/
 void m5set_createSettings(void)
 {
-	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
 
-	for (uint8_t i = 0; i < 2; i++)
-	{
-		_wn = new wifiNetwork();
-		sprintf(_wn->ssid, "NSA-Surveillance");
-		sprintf(_wn->pwd, "laganas.2017");
-		//sprintf(_wn->ssid, "Mario's iOS");
-		//sprintf(_wn->pwd, "xtesta.0815");
-		WifiNetworkList.add(_wn);
-	}
+	_swn = new savedWifiNetwork();
+	sprintf(_swn->ssid, "Size");
+	savedWifiNetworkList.add(_swn);
 
-	_wn = WifiNetworkList.get(0);
-	sprintf(_wn->ssid, "%d", WifiNetworkList.size());
+	_swn = new savedWifiNetwork();
+	sprintf(_swn->ssid, "NSA-Surveillance");
+	sprintf(_swn->pwd, "laganas.2017");
+	savedWifiNetworkList.add(_swn);
+
+	_swn = new savedWifiNetwork();
+	sprintf(_swn->ssid, "Mario's iOS");
+	sprintf(_swn->pwd, "xtesta.0815");
+	savedWifiNetworkList.add(_swn);
+
+	_swn = savedWifiNetworkList.get(0);
+	sprintf(_swn->ssid, "%d", savedWifiNetworkList.size());
 }
 
 /*------------------------------------------------------------------------------
@@ -70,16 +74,16 @@ void m5set_saveSettings(void)
 {
 	String fileName = "/config.txt";
 	DynamicJsonDocument doc(1024);
-	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
 
     File dataFile = SPIFFS.open(fileName, "w");
 
 	// create JSON-Document
-	for (uint8_t i = 0; i < WifiNetworkList.size(); i++)
+	for (uint8_t i = 0; i < savedWifiNetworkList.size(); i++)
 	{
-		_wn = WifiNetworkList.get(i);
-		doc[i]["ssid"] = _wn->ssid;
-		doc[i]["pwd"] = _wn->pwd;
+		_swn = savedWifiNetworkList.get(i);
+		doc[i]["ssid"] = _swn->ssid;
+		doc[i]["pwd"] = _swn->pwd;
 	}
 
 	// serialize JSON
@@ -96,7 +100,7 @@ void m5set_loadSettings(void)
 {
 	String fileName = "/config.txt";
 	DynamicJsonDocument doc(1024);
-	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
 
 	if (SPIFFS.exists(fileName))
 	{
@@ -115,24 +119,19 @@ void m5set_loadSettings(void)
 		uint8_t _size = atoi(doc[0]["ssid"]);
 		m5set_clearSettings();
 
-		_wn = new wifiNetwork();
-		sprintf(_wn->ssid, "%d", _size);
-		WifiNetworkList.add(_wn);
+		_swn = new savedWifiNetwork();
+		sprintf(_swn->ssid, "%d", _size);
+		savedWifiNetworkList.add(_swn);
 
-		//for (uint8_t i = 1; i < _size; i++)
-		//{
-		//}
+		for (uint8_t i = 1; i < _size; i++)
+		{
+			_swn = new savedWifiNetwork();
+			strlcpy(_swn->ssid, doc[i]["ssid"], sizeof(_swn->ssid));
+			strlcpy(_swn->pwd, doc[i]["pwd"], sizeof(_swn->pwd));
+			savedWifiNetworkList.add(_swn);
+		}
 
-		_wn = new wifiNetwork();
-		strlcpy(_wn->ssid, doc[1]["ssid"], sizeof(_wn->ssid));
-		strlcpy(_wn->pwd, doc[1]["pwd"], sizeof(_wn->pwd));
-		WifiNetworkList.add(_wn);
-
-		_wn = WifiNetworkList.get(1);
-		strlcpy(globalSettings->wifiSsid, _wn->ssid, sizeof(globalSettings->wifiSsid));
-		strlcpy(globalSettings->wifiPwd, _wn->pwd, sizeof(globalSettings->wifiPwd));
-
-		//m5set_printWifiList();
+		//m5set_printSavedWifiList();
 	}
 }
 
@@ -141,15 +140,15 @@ void m5set_loadSettings(void)
 ------------------------------------------------------------------------------*/
 void m5set_clearSettings(void)
 {
-	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
 
-	if (WifiNetworkList.size() > 0)
+	if (savedWifiNetworkList.size() > 0)
 	{
-		while (WifiNetworkList.size() > 0)
+		while (savedWifiNetworkList.size() > 0)
 		{
-			_wn = WifiNetworkList.get(0);
-			WifiNetworkList.remove(0);
-			delete _wn;
+			_swn = savedWifiNetworkList.get(0);
+			savedWifiNetworkList.remove(0);
+			delete _swn;
 		}
 	}
 }
@@ -157,19 +156,19 @@ void m5set_clearSettings(void)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void m5set_printWifiList(void)
+void m5set_printSavedWifiList(void)
 {
-	wifiNetwork *_wn;
+	savedWifiNetwork *_swn;
 
-	for (uint8_t i = 0; i < WifiNetworkList.size(); i++)
+	for (uint8_t i = 0; i < savedWifiNetworkList.size(); i++)
 	{
-		_wn = WifiNetworkList.get(i);
+		_swn = savedWifiNetworkList.get(i);
 		Serial.print("Network ");
 		Serial.print(i);
 		Serial.print(": ");
 		Serial.print("SSID: ");
-		Serial.print(_wn->ssid);
+		Serial.print(_swn->ssid);
 		Serial.print(", PWD: ");
-		Serial.println(_wn->pwd);
+		Serial.println(_swn->pwd);
 	}
 }
