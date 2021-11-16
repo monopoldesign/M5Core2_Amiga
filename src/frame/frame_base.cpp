@@ -50,7 +50,7 @@ Frame_Base::~Frame_Base()
 ------------------------------------------------------------------------------*/
 void Frame_Base::exitbtn(void)
 {
-	_key_exit = new GUI_Button(BUT_CLOSEW, 0, 24, 24, 25);
+	_key_exit = new GUI_Button(BUT_CLOSEW, _winX, _winY, 24, 25);
 }
 
 /*------------------------------------------------------------------------------
