@@ -68,17 +68,17 @@ void GUI_String::Draw()
 	if (_ishide)
 		return;
 
-	M5.Lcd.fillRect(_x, _y, _w, _h, M5.Lcd.color565(149, 149, 149));
-	M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, BLACK);
-	M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, BLACK);
-	M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, WHITE);
-	M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, WHITE);
+	M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+	M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+	M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
+	M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+	M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 
 	if (_label.length() > 0)
 	{
 		M5.Lcd.setFreeFont(&FreeSans9pt7b);
 		M5.Lcd.setTextSize(1);
-		M5.Lcd.setTextColor(BLACK);
+		M5.Lcd.setTextColor(MWB_BLACK);
 
 		uint8_t _xs = _x - M5.Lcd.textWidth(_label) - 8;
 		M5.Lcd.setCursor(_xs, _y + 16);
@@ -89,7 +89,7 @@ void GUI_String::Draw()
 	{
 		M5.Lcd.setFreeFont(&FreeSans9pt7b);
 		M5.Lcd.setTextSize(1);
-		M5.Lcd.setTextColor(BLACK);
+		M5.Lcd.setTextColor(MWB_BLACK);
 
 		M5.Lcd.setCursor(_x + 4, _y + 17);
 		M5.Lcd.print(_content);

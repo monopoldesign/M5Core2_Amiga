@@ -19,7 +19,7 @@
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-enum BUTTYPE {BUT_NORMAL, BUT_CLOSEW};
+enum BUTTYPE {BUT_NORMAL, BUT_CLOSEW, BUT_ARROWUP, BUT_ARROWDOWN};
 
 class GUI_Button : public GUI_Base
 {

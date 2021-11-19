@@ -16,6 +16,7 @@
 #include "frame_settings.h"
 #include "frame_gfxdemo.h"
 #include "frame_sysinfo.h"
+#include "frame_wifiman.h"
 #include "frame_windemo.h"
 
 /******************************************************************************
@@ -89,6 +90,22 @@ void key_app3_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void key_app4_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_WifiMan");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_WifiMan();
+		GUI_AddFrame("Frame_WifiMan", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_Main::Frame_Main(void): Frame_Base()
 {
 	_frame_name = "Frame_Main";
@@ -153,10 +170,14 @@ Frame_Main::Frame_Main(void): Frame_Base()
 	_key[3]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[3]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app3_cb);
 
+	_key[4]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[4]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app4_cb);
+
 	_time = millis();
 
 	if (globalSettings->isNTPTime)
 	{
+		M5.Lcd.setFreeFont(&FreeSans9pt7b);
 		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
 		M5.Lcd.setCursor(220, 16);
 		M5.Lcd.print(buffer);
@@ -236,6 +257,7 @@ int Frame_Main::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
 
+	M5.Lcd.setFreeFont(&FreeSans9pt7b);
 	Frame_Base::init_StatusBar();
 
 	for (uint8_t i = 0; i < MAX_APPS; i++)

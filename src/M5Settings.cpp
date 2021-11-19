@@ -45,66 +45,18 @@ void m5set_initSettings(void)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void m5set_createSettings(void)
-{
-	savedWifiNetwork *_swn;
-
-	_swn = new savedWifiNetwork();
-	sprintf(_swn->ssid, "Size");
-	savedWifiNetworkList.add(_swn);
-
-	_swn = new savedWifiNetwork();
-	sprintf(_swn->ssid, "NSA-Surveillance");
-	sprintf(_swn->pwd, "laganas.2017");
-	savedWifiNetworkList.add(_swn);
-
-	_swn = new savedWifiNetwork();
-	sprintf(_swn->ssid, "Mario's iOS");
-	sprintf(_swn->pwd, "xtesta.0815");
-	savedWifiNetworkList.add(_swn);
-
-	_swn = savedWifiNetworkList.get(0);
-	sprintf(_swn->ssid, "%d", savedWifiNetworkList.size());
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void m5set_saveSettings(void)
-{
-	String fileName = "/config.txt";
-	DynamicJsonDocument doc(1024);
-	savedWifiNetwork *_swn;
-
-    File dataFile = SPIFFS.open(fileName, "w");
-
-	// create JSON-Document
-	for (uint8_t i = 0; i < savedWifiNetworkList.size(); i++)
-	{
-		_swn = savedWifiNetworkList.get(i);
-		doc[i]["ssid"] = _swn->ssid;
-		doc[i]["pwd"] = _swn->pwd;
-	}
-
-	// serialize JSON
-	if (serializeJson(doc, dataFile) == 0)
-		Serial.println(F("Failed to write to file"));
-
-	dataFile.close();
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
 void m5set_loadSettings(void)
 {
-	String fileName = "/config.txt";
+	String fileName = "/config.json";
 	DynamicJsonDocument doc(1024);
 	savedWifiNetwork *_swn;
 
 	if (SPIFFS.exists(fileName))
 	{
 		File dataFile = SPIFFS.open(fileName, "r");
+
+		//while (dataFile.available())
+		//	Serial.write(dataFile.read());
 
 		DeserializationError error = deserializeJson(doc, dataFile);
 

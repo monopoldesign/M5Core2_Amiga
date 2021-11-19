@@ -20,6 +20,8 @@
 *******************************************************************************/
 typedef std::vector<void *> gui_args_vector_t;
 
+#define READONLY true
+
 class GUI_Base
 {
 	public:
