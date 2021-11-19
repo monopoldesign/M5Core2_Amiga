@@ -28,9 +28,17 @@ Frame_WifiMan::Frame_WifiMan(void)
 {
 	_frame_name = "Frame_WifiMan";
 
-	_list = new GUI_List(10, 10 + (2 * 24), 200, 160);
-	_but[0] = new GUI_Button(BUT_ARROWUP, 10 + 200 + 1, 10 + (2 * 24) + 160 - 64, 28, 32);
-	_but[1] = new GUI_Button(BUT_ARROWUP, 10 + 200 + 1, 10 + (2 * 24) + 160 - 32, 28, 32);
+	_list = new GUI_List(10, 8 + (2 * 24), 200, 148);
+	_but[0] = new GUI_Button(BUT_ARROWUP, 10 + 200, 8 + (2 * 24) + 148 - 64, 28, 32);
+	_but[1] = new GUI_Button(BUT_ARROWDOWN, 10 + 200, 8 + (2 * 24) + 148 - 32, 28, 32);
+	_slider = new GUI_Slider(10 + 200, 8 + (2 * 24), 28, 148 - (2 * 32), 0, 10, 0);
+	_string = new GUI_String("\0", "\0", 10, 8 + (2 * 24) + 148 + 4, 200 + 28, 24);
+
+	_but[2] = new GUI_Button("Ok", 10 + 200 + 28 + 8, 8 + (2 * 24) + (0 * 32), 64, 32);
+	_but[3] = new GUI_Button("Exit", 10 + 200 + 28 + 8, 8 + (2 * 24) + (1 * 32) + 8, 64, 32);
+
+	_but[3]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
+	_but[3]->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
 
 	exitbtn();
 	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
@@ -57,10 +65,17 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 	GUI_AddObject(_list);
 	_list->init();
 
-	GUI_AddObject(_but[0]);
-	_but[0]->init();
-	GUI_AddObject(_but[1]);
-	_but[1]->init();
+	for (uint8_t i = 0; i < 4; i++)
+	{
+		GUI_AddObject(_but[i]);
+		_but[i]->init();
+	}
+
+	GUI_AddObject(_slider);
+	_slider->init();
+
+	GUI_AddObject(_string);
+	_string->init();
 
 	return 3;
 }

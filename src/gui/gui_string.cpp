@@ -70,9 +70,11 @@ void GUI_String::Draw()
 
 	M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
 	M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+	M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 	M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
-	M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+	M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 	M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+	M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
 	if (_label.length() > 0)
 	{

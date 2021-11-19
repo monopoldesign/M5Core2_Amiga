@@ -65,6 +65,8 @@ void GUI_Button::init()
 ------------------------------------------------------------------------------*/
 void GUI_Button::Draw()
 {
+	uint8_t _o = 6;
+
 	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
 	{
 		switch (_type)
@@ -82,19 +84,44 @@ void GUI_Button::Draw()
 				break;
 
 			case BUT_ARROWUP:
+				// Gadget
 				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
+
+				// Symbol
+				M5.Lcd.fillTriangle(_x + _o, _y + _h - _o, _x + (_w / 2), _y + _o, _x + _w - _o, _y + _h - _o, MWB_BLACK);
+				break;
+
+			case BUT_ARROWDOWN:
+				// Gadget
+				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
+				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
+				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
+
+				// Symbol
+				M5.Lcd.fillTriangle(_x + _o, _y + _o, _x + (_w / 2), _y + _h - _o, _x + _w - _o, _y + _o, MWB_BLACK);
 				break;
 
 			default:
 				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 
 				if (_label.length() > 0)
 				{
@@ -126,19 +153,44 @@ void GUI_Button::Draw()
 				break;
 
 			case BUT_ARROWUP:
-				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+				// Gadget
+				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_BLUE);
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
+
+				// Symbol
+				M5.Lcd.fillTriangle(_x + _o, _y + _h - _o, _x + (_w / 2), _y + _o, _x + _w - _o, _y + _h - _o, MWB_BLACK);
+				break;
+
+			case BUT_ARROWDOWN:
+				// Gadget
+				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_BLUE);
+				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
+				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
+				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
+
+				// Symbol
+				M5.Lcd.fillTriangle(_x + _o, _y + _o, _x + (_w / 2), _y + _h - _o, _x + _w - _o, _y + _o, MWB_BLACK);
 				break;
 
 			default:
-				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+				M5.Lcd.fillRect(_x, _y, _w, _h, MWB_BLUE);
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
 				if (_label.length() > 0)
 				{
@@ -147,7 +199,7 @@ void GUI_Button::Draw()
 					M5.Lcd.setTextColor(MWB_BLACK);
 
 					uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-					M5.Lcd.setCursor(xtext + 2, _y + 22 + 2);
+					M5.Lcd.setCursor(xtext, _y + 22);
 					M5.Lcd.print(_label);
 				}
 				break;
@@ -177,6 +229,7 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 		{
 			_state = EVENT_PRESSED;
 			Draw();
+
 			if (_pressed_cb != NULL)
 				_pressed_cb(_pressed_cb_args);
 		}
@@ -187,9 +240,12 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 		{
 			_state = EVENT_NONE;
 			Draw();
+
 			if (_released_cb != NULL)
 				_released_cb(_released_cb_args);
 		}
+		else
+			Draw();
 	}
 }
 

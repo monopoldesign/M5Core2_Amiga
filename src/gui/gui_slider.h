@@ -1,34 +1,35 @@
-#ifndef _FRAME_WIFIMAN_H_
-#define _FRAME_WIFIMAN_H_
+#ifndef _GUI_SLIDER_H
+#define _GUI_SLIDER_H
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Wifi-Manager
+* GUI-Slider-Class
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include "frame_base.h"
-#include "../gui/gui.h"
+#include <M5Core2.h>
+
+#include "main.h"
+#include "gui_base.h"
 
 /******************************************************************************
-* Class Definition
+* Definitions
 *******************************************************************************/
-class Frame_WifiMan : public Frame_Base
+class GUI_Slider : public GUI_Base
 {
 	public:
-		Frame_WifiMan();
-		~Frame_WifiMan();
-		int init(gui_args_vector_t &args);
+		GUI_Slider(int16_t x, int16_t y, int16_t w, int16_t h, int8_t min, int8_t max, int8_t level);
+		~GUI_Slider();
+		void init();
+		void Draw();
+		void UpdateState(TouchPoint_t pos);
 
 	private:
-		GUI_List *_list;
-		GUI_Button *_but[4];
-		GUI_Slider *_slider;
-		GUI_String *_string;
+		int8_t _min, _max, _level;
 };
 
 #endif

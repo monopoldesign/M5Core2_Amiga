@@ -30,6 +30,8 @@ GUI_List::GUI_List(int16_t x, int16_t y, int16_t w, int16_t h, boolean readonly)
 	_maxChar = _w / 11;
 	_maxItems = _h / 18;
 
+	_selectedItem = 0;
+
 	for (uint8_t i = 0; i < _maxItems; i++)
 		_itemZone[i] = new HotZone(_x + 4, _y + (i * 18) + 3, _x + 4 + _w - (2 * 4), _y + (i * 18) + 3 + 16);
 }
@@ -48,6 +50,8 @@ void GUI_List::init()
 {
 	for (uint8_t i = 0; i < _maxItems; i++)
 		_itemZone[i]->setZone(_x + 4, _y + (i * 18) + 3, _x + 4 + _w - (2 * 4), _y + (i * 18) + 3 + 16);
+
+	_selectedItem = 0;
 }
 
 /*------------------------------------------------------------------------------
@@ -71,11 +75,12 @@ void GUI_List::Draw()
 		M5.Lcd.drawLine(_x, _y, _x + _w - 2, _y, MWB_WHITE);
 
 		M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 2, MWB_WHITE);
-		M5.Lcd.drawLine(_x + _w, _y, _x + _w, _y + _h - 1, MWB_WHITE);
 		M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 	}
 
-	M5.Lcd.fillRect(_x + 4, _y + (_selectedItem * 18) + 3, _w - (2 * 4), 16, MWB_BLUE);
+	// mark selected Item
+	if (!_readOnly)
+		M5.Lcd.fillRect(_x + 4, _y + (_selectedItem * 18) + 3, _w - (2 * 4), 16, MWB_BLUE);
 
 	// Items
 	for (uint8_t i = 0; i < _maxItems; i++)
@@ -85,7 +90,6 @@ void GUI_List::Draw()
 		strncpy(_buffer, buffer, _maxChar);
 		M5.Lcd.print(buffer);
 	}
-
 }
 
 /*------------------------------------------------------------------------------
