@@ -28,6 +28,8 @@ GUI_String::GUI_String(String label, String content, int16_t x, int16_t y, int16
 	_y = y;
 	_w = w;
 	_h = h;
+
+	_maxLen = _w / 11;
 }
 
 /*------------------------------------------------------------------------------
@@ -94,7 +96,9 @@ void GUI_String::Draw()
 		M5.Lcd.setTextColor(MWB_BLACK);
 
 		M5.Lcd.setCursor(_x + 4, _y + 17);
-		M5.Lcd.print(_content);
+		memset(_buffer, '\0', sizeof(_buffer));
+		strncpy(_buffer, _content.c_str(), _maxLen);
+		M5.Lcd.print(_buffer);
 	}
 }
 

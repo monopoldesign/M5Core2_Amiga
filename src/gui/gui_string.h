@@ -42,6 +42,8 @@ class GUI_String : public GUI_Base
 		String _label;
 		String _content;
 		String _contentOrig;
+		uint8_t _maxLen;
+		char _buffer[32];
 };
 
 #endif

@@ -23,6 +23,7 @@ class Frame_WifiMan : public Frame_Base
 		Frame_WifiMan();
 		~Frame_WifiMan();
 		int init(gui_args_vector_t &args);
+		int run();
 
 	private:
 		GUI_List *_list;
