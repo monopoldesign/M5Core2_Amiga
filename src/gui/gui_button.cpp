@@ -65,8 +65,8 @@ void GUI_Button::init()
 ------------------------------------------------------------------------------*/
 void GUI_Button::Draw()
 {
-	uint8_t _o = 6;
-
+	uint8_t _o = 6;	// Offset for "Arrow"-Triangle
+	
 	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
 	{
 		switch (_type)
@@ -247,6 +247,13 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 		else
 			Draw();
 	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_Button::UpdatePosition(TouchPoint_t pos)
+{
 }
 
 /*------------------------------------------------------------------------------

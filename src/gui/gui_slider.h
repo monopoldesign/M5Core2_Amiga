@@ -22,14 +22,43 @@
 class GUI_Slider : public GUI_Base
 {
 	public:
-		GUI_Slider(int16_t x, int16_t y, int16_t w, int16_t h, int8_t min, int8_t max, int8_t level);
+		static const int16_t EVENT_NONE = 0;
+		static const int16_t EVENT_PRESSED = 1;
+		static const int16_t EVENT_RELEASED = 2;
+		static const int16_t EVENT_MOVED = 3;
+
+	public:
+		GUI_Slider(int16_t x, int16_t y, int16_t w, int16_t h);
 		~GUI_Slider();
 		void init();
+
+		void setMin(int8_t min);
+		void setMax(int8_t max);
+		void setLevel(int8_t level);
+		uint8_t getSelectedMin(void);
+		void setSelectedMin(uint8_t min);
+		void calculate(void);
+
 		void Draw();
 		void UpdateState(TouchPoint_t pos);
+		void UpdatePosition(TouchPoint_t pos);
+		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
+		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
+		void (*_released_cb)(gui_args_vector_t& args) = NULL;
+		gui_args_vector_t _pressed_cb_args;
+		gui_args_vector_t _released_cb_args;
+		int16_t _state = EVENT_NONE;
+
 		int8_t _min, _max, _level;
+		float _sizeY, _step;
+		int8_t _selMin;
+
+		HotZone *_knobZone;
+		TouchPoint_t _startPos, _oldPos;
+		boolean _isMoveable;
 };
 
 #endif

@@ -28,8 +28,10 @@ typedef struct
 * Prototypes
 *******************************************************************************/
 void GUI_AddObject(GUI_Base *object);
+void GUI_AddObject_Move(GUI_Base *object);
 void GUI_Draw();
 void GUI_Process();
+void GUI_Process_Move();
 void GUI_Clear(void);
 void GUI_Run(Frame_Base *frame);
 void GUI_MainLoop(void);

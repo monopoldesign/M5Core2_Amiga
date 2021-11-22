@@ -33,6 +33,7 @@ class GUI_String : public GUI_Base
 		void init();
 		void Draw();
 		void UpdateState(TouchPoint_t pos);
+		void UpdatePosition(TouchPoint_t pos);
 
 		void setValue(String newString);
 		void setValue(uint32_t newValue);

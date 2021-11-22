@@ -86,7 +86,10 @@ void GUI_List::Draw()
 
 	// mark selected Item
 	if (!_readOnly)
-		M5.Lcd.fillRect(_x + 4, _y + ((_selectedItem - _selectedMin) * 18) + 3, _w - (2 * 4), 16, MWB_BLUE);
+	{
+		if ((_selectedItem >= _selectedMin) && (_selectedItem < (_selectedMin + _maxItems)))
+			M5.Lcd.fillRect(_x + 4, _y + ((_selectedItem - _selectedMin) * 18) + 3, _w - (2 * 4), 16, MWB_BLUE);
+	}
 
 	// Items
 	if (_itemList.size() > 0)
@@ -155,6 +158,21 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void GUI_List::UpdatePosition(TouchPoint_t pos)
+{
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_List::setSelectedItem(uint8_t item)
+{
+	_selectedItem = item;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 String GUI_List::getSelectedItem(void)
 {
 	ListItem *_li;
@@ -168,6 +186,22 @@ String GUI_List::getSelectedItem(void)
 	}
 
 	return String("");
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+uint8_t GUI_List::getSelectedMin(void)
+{
+	return _selectedMin;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_List::setSelectedMin(uint8_t min)
+{
+	_selectedMin = min;
 }
 
 /*------------------------------------------------------------------------------
@@ -210,4 +244,12 @@ void GUI_List::selectPrevItem(void)
 
 		Draw();
 	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+uint8_t GUI_List::getSize(void)
+{
+	return _itemList.size();
 }

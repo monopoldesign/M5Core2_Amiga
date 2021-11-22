@@ -35,10 +35,16 @@ class GUI_List : public GUI_Base
 		void addItem(String item);
 		void clearItemList(void);
 		void UpdateState(TouchPoint_t pos);
+		void UpdatePosition(TouchPoint_t pos);
+
+		void setSelectedItem(uint8_t item);
 		String getSelectedItem(void);
+		uint8_t getSelectedMin(void);
+		void setSelectedMin(uint8_t min);
 		boolean isSelected(void);
 		void selectNextItem(void);
 		void selectPrevItem(void);
+		uint8_t getSize(void);
 
 	private:
 		HotZone *_itemZone[10];

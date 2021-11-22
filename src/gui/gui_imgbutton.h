@@ -32,6 +32,7 @@ class GUI_ImgButton : public GUI_Base
 		void Draw();
 		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
 		void UpdateState(TouchPoint_t pos);
+		void UpdatePosition(TouchPoint_t pos);
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:

@@ -30,6 +30,7 @@ class GUI_Base
 		virtual ~GUI_Base() {};
 		virtual void Draw() = 0;
 		virtual void UpdateState(TouchPoint_t pos) = 0;
+		virtual void UpdatePosition(TouchPoint_t pos) = 0;
 		void SetID(uint32_t id) { _id = id; }
 
 		inline int16_t getX() { return _x; }

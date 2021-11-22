@@ -19,7 +19,9 @@
 * Global Variables
 *******************************************************************************/
 std::list<GUI_Base *> gui_object_list;
+std::list<GUI_Base *> gui_objectM_list;
 uint32_t obj_id = 1;
+uint32_t objM_id = 1;
 Frame_Base* wait_for_delete = NULL;
 std::stack<Frame_Base *> frame_stack;
 std::map<String, frame_struct_t> frame_map;
@@ -46,6 +48,16 @@ void GUI_AddObject(GUI_Base *object)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void GUI_AddObject_Move(GUI_Base *object)
+{
+	object->SetID(objM_id);
+	objM_id++;
+	gui_objectM_list.push_back(object);
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 void GUI_Draw()
 {
 	for (std::list<GUI_Base *>::iterator p = gui_object_list.begin(); p != gui_object_list.end(); p++)
@@ -59,6 +71,15 @@ void GUI_Process()
 {
 	for (std::list<GUI_Base *>::iterator p = gui_object_list.begin(); p != gui_object_list.end(); p++)
 		(*p)->UpdateState(pos);
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_Process_Move()
+{
+	for (std::list<GUI_Base *>::iterator p = gui_objectM_list.begin(); p != gui_objectM_list.end(); p++)
+		(*p)->UpdatePosition(pos);
 }
 
 /*------------------------------------------------------------------------------
@@ -111,6 +132,10 @@ void GUI_Run(Frame_Base* frame)
 		{
 			pressed = false;
 			GUI_Process();
+		}
+		else if ((pos.y != -1) && (pressed == true))
+		{
+			GUI_Process_Move();
 		}
 	}
 }
