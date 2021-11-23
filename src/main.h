@@ -1,3 +1,6 @@
+#ifndef _MAIN_H
+#define _MAIN_H
+
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
@@ -56,3 +59,5 @@ void i2s_task(void *arg);
 extern const unsigned char previewR[120264];
 
 extern char buffer[16];
+
+#endif

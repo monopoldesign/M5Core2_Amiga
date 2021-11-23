@@ -158,20 +158,20 @@ Frame_Main::Frame_Main(void): Frame_Base()
 	}
 
 	// Button-Functions
-	_key[0]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[0]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app0_cb);
+	_key[0]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[0]->Bind(EVENT_RELEASED, key_app0_cb);
 
-	_key[1]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[1]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app1_cb);
+	_key[1]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[1]->Bind(EVENT_RELEASED, key_app1_cb);
 
-	_key[2]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[2]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app2_cb);
+	_key[2]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[2]->Bind(EVENT_RELEASED, key_app2_cb);
 
-	_key[3]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[3]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app3_cb);
+	_key[3]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[3]->Bind(EVENT_RELEASED, key_app3_cb);
 
-	_key[4]->AddArgs(GUI_ImgButton::EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[4]->Bind(GUI_ImgButton::EVENT_RELEASED, key_app4_cb);
+	_key[4]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[4]->Bind(EVENT_RELEASED, key_app4_cb);
 
 	_time = millis();
 

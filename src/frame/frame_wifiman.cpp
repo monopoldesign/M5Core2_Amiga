@@ -108,41 +108,55 @@ void sliderMove(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void list_press(gui_args_vector_t &args)
+{
+	GUI_List *_li = (GUI_List *)(args[0]);
+	GUI_String *_str = (GUI_String *)(args[1]);
+
+	_str->setValue(_li->getSelectedItem());
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_WifiMan::Frame_WifiMan(void)
 {
 	_frame_name = "Frame_WifiMan";
 
-	_list = new GUI_List(10, 8 + (2 * 24), 200, 148);
-	_but[0] = new GUI_Button(BUT_ARROWUP, 10 + 200, 8 + (2 * 24) + 148 - 64, 28, 32);
-	_but[1] = new GUI_Button(BUT_ARROWDOWN, 10 + 200, 8 + (2 * 24) + 148 - 32, 28, 32);
-	_slider = new GUI_Slider(10 + 200, 8 + (2 * 24), 28, 148);
 	_string = new GUI_String("\0", "\0", 10, 8 + (2 * 24) + 148 + 4, 200 + 28, 24);
 
+	_list = new GUI_List(10, 8 + (2 * 24), 200, 148);
+	_list->AddArgs(EVENT_RELEASED, 0, _list);
+	_list->AddArgs(EVENT_RELEASED, 1, _string);
+	_list->Bind(EVENT_RELEASED, &list_press);
+
+	_but[0] = new GUI_Button(BUT_ARROWUP, 10 + 200, 8 + (2 * 24) + 148 - 64, 28, 32);
+	_but[0]->AddArgs(EVENT_RELEASED, 0, _list);
+	_but[0]->AddArgs(EVENT_RELEASED, 1, _slider);
+	_but[0]->Bind(EVENT_RELEASED, &but_arrowUp);
+
+	_but[1] = new GUI_Button(BUT_ARROWDOWN, 10 + 200, 8 + (2 * 24) + 148 - 32, 28, 32);
+	_but[1]->AddArgs(EVENT_RELEASED, 0, _list);
+	_but[1]->AddArgs(EVENT_RELEASED, 1, _slider);
+	_but[1]->Bind(EVENT_RELEASED, &but_arrowDown);
+
+	_slider = new GUI_Slider(10 + 200, 8 + (2 * 24), 28, 148);
+	_slider->AddArgs(EVENT_MOVED, 0, _slider);
+	_slider->AddArgs(EVENT_MOVED, 1, _list);
+	_slider->Bind(EVENT_MOVED, &sliderMove);
+
 	_but[2] = new GUI_Button("Ok", 10 + 200 + 28 + 8, 8 + (2 * 24) + (0 * 32), 64, 32);
+	_but[2]->AddArgs(EVENT_RELEASED, 0, _list);
+	_but[2]->AddArgs(EVENT_RELEASED, 1, _slider);
+	_but[2]->Bind(EVENT_RELEASED, &but_rescan);
+
 	_but[3] = new GUI_Button("Exit", 10 + 200 + 28 + 8, 8 + (2 * 24) + (1 * 32) + 8, 64, 32);
-
-	_but[0]->AddArgs(GUI_Button::EVENT_RELEASED, 0, _list);
-	_but[0]->AddArgs(GUI_Button::EVENT_RELEASED, 1, _slider);
-	_but[0]->Bind(GUI_Button::EVENT_RELEASED, &but_arrowUp);
-
-	_but[1]->AddArgs(GUI_Button::EVENT_RELEASED, 0, _list);
-	_but[1]->AddArgs(GUI_Button::EVENT_RELEASED, 1, _slider);
-	_but[1]->Bind(GUI_Button::EVENT_RELEASED, &but_arrowDown);
-
-	_but[2]->AddArgs(GUI_Button::EVENT_RELEASED, 0, _list);
-	_but[2]->AddArgs(GUI_Button::EVENT_RELEASED, 1, _slider);
-	_but[2]->Bind(GUI_Button::EVENT_RELEASED, &but_rescan);
-
-	_but[3]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_but[3]->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
-
-	_slider->AddArgs(GUI_Slider::EVENT_MOVED, 0, _slider);
-	_slider->AddArgs(GUI_Slider::EVENT_MOVED, 1, _list);
-	_slider->Bind(GUI_Slider::EVENT_MOVED, &sliderMove);
+	_but[3]->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
+	_but[3]->Bind(EVENT_RELEASED, &Frame_Base::exit_cb);
 
 	exitbtn();
-	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
+	_key_exit->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
+	_key_exit->Bind(EVENT_RELEASED, &Frame_Base::exit_cb);
 }
 	
 /*------------------------------------------------------------------------------
@@ -214,9 +228,6 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 int Frame_WifiMan::run()
 {
 	//Frame_Base::run();
-
-	if (_list->isSelected())
-		_string->setValue(_list->getSelectedItem());
 
 	return 1;
 }

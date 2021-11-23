@@ -21,6 +21,7 @@
 typedef std::vector<void *> gui_args_vector_t;
 
 #define READONLY true
+enum EVT {EVENT_NONE, EVENT_PRESSED, EVENT_RELEASED, EVENT_MOVED};
 
 class GUI_Base
 {

@@ -147,12 +147,30 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 	{
 		if (_itemZone[i]->inHotZone(pos) && i < _itemList.size())
 		{
-			_selectedItem = i + _selectedMin;
-			_isSelected = true;
+			if (_state == EVENT_NONE)
+			{
+				_selectedItem = i + _selectedMin;
+				_isSelected = true;
+
+				_state = EVENT_PRESSED;
+				Draw();
+
+				if (_pressed_cb != NULL)
+					_pressed_cb(_pressed_cb_args);
+			}
+		}
+		else
+		{
+			if (_state == EVENT_PRESSED)
+			{
+				_state = EVENT_NONE;
+				Draw();
+
+				if (_released_cb != NULL)
+					_released_cb(_released_cb_args);
+			}
 		}
 	}
-
-	Draw();
 }
 
 /*------------------------------------------------------------------------------
@@ -252,4 +270,36 @@ void GUI_List::selectPrevItem(void)
 uint8_t GUI_List::getSize(void)
 {
 	return _itemList.size();
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_List::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
+{
+	if (event == EVENT_PRESSED)
+		_pressed_cb = func_cb;
+	else if (event == EVENT_RELEASED)
+		_released_cb = func_cb;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_List::AddArgs(int16_t event, uint16_t n, void* arg)
+{
+	if (event == EVENT_PRESSED)
+	{
+		if (_pressed_cb_args.size() > n)
+			_pressed_cb_args[n] = arg;
+		else
+			_pressed_cb_args.push_back(arg);
+	}
+	else if (event == EVENT_RELEASED)
+	{
+		if (_released_cb_args.size() > n)
+			_released_cb_args[n] = arg;
+		else
+			_released_cb_args.push_back(arg);
+	}
 }

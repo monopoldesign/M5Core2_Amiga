@@ -24,11 +24,6 @@ enum BUTTYPE {BUT_NORMAL, BUT_CLOSEW, BUT_ARROWUP, BUT_ARROWDOWN};
 class GUI_Button : public GUI_Base
 {
 	public:
-		static const int16_t EVENT_NONE = 0;
-		static const int16_t EVENT_PRESSED = 1;
-		static const int16_t EVENT_RELEASED = 2;
-
-	public:
 		GUI_Button(uint8_t type, int16_t x, int16_t y, int16_t w, int16_t h);
 		GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h);
 		~GUI_Button();

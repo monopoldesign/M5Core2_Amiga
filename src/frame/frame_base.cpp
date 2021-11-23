@@ -124,8 +124,8 @@ void Frame_Base::openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, Stri
 	M5.Lcd.println(title);
 
 	exitbtn();
-	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &exit_cb);
+	_key_exit->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
+	_key_exit->Bind(EVENT_RELEASED, &exit_cb);
 
 	GUI_AddObject(_key_exit);
 	_key_exit->init();

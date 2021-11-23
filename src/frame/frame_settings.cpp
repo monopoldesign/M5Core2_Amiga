@@ -57,13 +57,13 @@ Frame_Settings::Frame_Settings(void)
 
 	// create Button
 	_button[0] = new GUI_Button("Change Values", 16, (0 * (32 + 8)) + 48 + 16, 320 - (2 * 16), 32);
-	_button[0]->AddArgs(GUI_Button::EVENT_RELEASED, 0, _string[0]);
-	_button[0]->AddArgs(GUI_Button::EVENT_RELEASED, 1, _string[1]);
-	_button[0]->Bind(GUI_Button::EVENT_RELEASED, &but_changeVal);
+	_button[0]->AddArgs(EVENT_RELEASED, 0, _string[0]);
+	_button[0]->AddArgs(EVENT_RELEASED, 1, _string[1]);
+	_button[0]->Bind(EVENT_RELEASED, &but_changeVal);
 
 	_button[1] = new GUI_Button("Exit", 16, (3 * (32 + 8)) + 48 + 16, 320 - (2 * 16), 32);
-	_button[1]->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_button[1]->Bind(GUI_Button::EVENT_RELEASED, &but_exit);
+	_button[1]->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
+	_button[1]->Bind(EVENT_RELEASED, &but_exit);
 }
 
 /*------------------------------------------------------------------------------

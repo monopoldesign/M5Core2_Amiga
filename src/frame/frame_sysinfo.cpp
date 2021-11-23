@@ -38,8 +38,8 @@ Frame_SysInfo::Frame_SysInfo(void)
 	_string[5] = new GUI_String("Min.Heap:", esp_get_minimum_free_heap_size(), 320 - STRINGSIZE - 16, (5 * (24 + 4)) + 56 + 4, STRINGSIZE, 24);
 
 	exitbtn();
-	_key_exit->AddArgs(GUI_Button::EVENT_RELEASED, 0, (void *)(&_is_run));
-	_key_exit->Bind(GUI_Button::EVENT_RELEASED, &Frame_Base::exit_cb);
+	_key_exit->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
+	_key_exit->Bind(EVENT_RELEASED, &Frame_Base::exit_cb);
 }
 	
 /*------------------------------------------------------------------------------

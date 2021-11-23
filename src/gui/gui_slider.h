@@ -22,12 +22,6 @@
 class GUI_Slider : public GUI_Base
 {
 	public:
-		static const int16_t EVENT_NONE = 0;
-		static const int16_t EVENT_PRESSED = 1;
-		static const int16_t EVENT_RELEASED = 2;
-		static const int16_t EVENT_MOVED = 3;
-
-	public:
 		GUI_Slider(int16_t x, int16_t y, int16_t w, int16_t h);
 		~GUI_Slider();
 		void init();
