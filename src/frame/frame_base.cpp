@@ -89,8 +89,6 @@ void Frame_Base::openWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h, Stri
 	_winH = h;
 	_title = title;
 
-	//M5.Lcd.drawBitmap(_winX, _winY, _winW, _winH, Window);
-
 	// Window-Fill
 	if (active)
 		M5.Lcd.fillRect(_winX, _winY, _winW, _winH, MWB_BLUE);
@@ -261,4 +259,18 @@ void Frame_Base::exit_cb(gui_args_vector_t &args)
 {
 	GUI_PopFrame();
 	*((int *)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void Frame_Base::updateControl()
+{
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+AudioOutput_t Frame_Base::updateAudio()
+{
 }

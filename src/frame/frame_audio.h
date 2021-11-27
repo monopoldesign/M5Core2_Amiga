@@ -1,11 +1,11 @@
-#ifndef _FRAME_WIFIMAN_H_
-#define _FRAME_WIFIMAN_H_
+#ifndef _FRAME_AUDIO_H_
+#define _FRAME_AUDIO_H_
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Wifi-Manager
+* Frame: Audio-Test
 *******************************************************************************/
 
 /******************************************************************************
@@ -17,20 +17,21 @@
 /******************************************************************************
 * Class Definition
 *******************************************************************************/
-class Frame_WifiMan : public Frame_Base
+enum AType{AT_NONE, AT_RTTTL, AT_MP3};
+
+class Frame_Audio : public Frame_Base
 {
 	public:
-		Frame_WifiMan();
-		~Frame_WifiMan();
+		Frame_Audio();
+		~Frame_Audio();
 		int init(gui_args_vector_t &args);
 		int run();
+		//void updateControl();
+		//AudioOutput_t updateAudio();
 
 	private:
-		GUI_List *_list;
 		GUI_Button *_but[4];
-		GUI_Slider *_slider;
-		GUI_String *_string;
-		GUI_Checkbox *_cb;
+		uint8_t _atype;
 };
 
 #endif

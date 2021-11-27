@@ -21,6 +21,7 @@
 * Header-Files
 *******************************************************************************/
 #include <M5Core2.h>
+#include <MozziGuts.h>
 #include <driver/i2s.h>
 
 #include "main.h"
@@ -29,10 +30,6 @@
 #include "M5Wifi.h"
 #include "gui/gui.h"
 #include "frame/frame.h"
-
-/******************************************************************************
-* Definitions
-*******************************************************************************/
 
 /******************************************************************************
 * Global Variables
@@ -76,11 +73,11 @@ void setup()
 		return;
 	}
 
-	M5.begin(true, false, true, true);
+	M5.begin(true, true, true, true);
 
 	M5.Axp.SetSpkEnable(true);
-	InitI2SSpeakerOrMic(MODE_SPK);
-	xTaskCreatePinnedToCore(i2s_task, "i2s_task", 4096, NULL, 3, NULL, 0);
+	//InitI2SSpeakerOrMic(MODE_SPK);
+	//startMozzi(CONTROL_RATE);
 
 	//M5.Lcd.drawJpgFile(SPIFFS, "/First.jpg", 0, 0, 320, 214);
 	//delay(5000);
@@ -91,9 +88,9 @@ void setup()
 
 	m5set_loadSettings();
 
-	m5wifi_scanWifi();
-	m5wifi_findWifi();
-	m5wifi_printWifiList();
+	//m5wifi_scanWifi();
+	//m5wifi_findWifi();
+	//m5wifi_printWifiList();
 
 	if (m5wifi_setWifi())
 	{
@@ -160,14 +157,4 @@ bool InitI2SSpeakerOrMic(int mode)
 	err += i2s_set_pin(Speak_I2S_NUMBER, &tx_pin_config);
 	err += i2s_set_clk(Speak_I2S_NUMBER, 44100, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
 	return true;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void i2s_task(void *arg)
-{
-	size_t bytes_written = 0;
-	i2s_write(Speak_I2S_NUMBER, previewR, 120264, &bytes_written, portMAX_DELAY);
-	vTaskDelete(NULL);
 }

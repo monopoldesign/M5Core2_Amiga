@@ -30,6 +30,7 @@ uint32_t g_last_active_time_millis = 0;
 
 boolean pressed;
 TouchPoint_t pos;
+Frame_Base *curFrame;
 
 /******************************************************************************
 * Functions
@@ -121,21 +122,28 @@ void GUI_Run(Frame_Base* frame)
 			return;
 		}
 
-		pos = M5.Touch.getPressPoint();
+		if (frame->hasMozzi())
+		{
+			audioHook();
+		}
+		else
+		{
+			pos = M5.Touch.getPressPoint();
 
-		if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
-		{
-			pressed = true;
-			GUI_Process();
-		}
-		else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
-		{
-			pressed = false;
-			GUI_Process();
-		}
-		else if ((pos.y != -1) && (pressed == true))
-		{
-			GUI_Process_Move();
+			if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
+			{
+				pressed = true;
+				GUI_Process();
+			}
+			else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
+			{
+				pressed = false;
+				GUI_Process();
+			}
+			else if ((pos.y != -1) && (pressed == true))
+			{
+				GUI_Process_Move();
+			}
 		}
 	}
 }
@@ -147,11 +155,13 @@ void GUI_MainLoop(void)
 {
 	if ((!frame_stack.empty()) && (frame_stack.top() != NULL))
 	{
-		Frame_Base *frame = frame_stack.top();
-		log_d("Run %s", frame->GetFrameName().c_str());
+		curFrame = frame_stack.top();
+
+		log_d("Run %s", curFrame->GetFrameName().c_str());
+
 		GUI_Clear();
-		frame->init(frame_map[frame->GetFrameName()].args);
-		GUI_Run(frame);
+		curFrame->init(frame_map[curFrame->GetFrameName()].args);
+		GUI_Run(curFrame);
 	}
 }
 
@@ -201,4 +211,36 @@ void GUI_PopFrame(bool isDelete)
 void GUI_UpdateGlobalLastActiveTime()
 {
 	g_last_active_time_millis = millis();
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void updateControl()
+{
+	pos = M5.Touch.getPressPoint();
+
+	if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
+	{
+		pressed = true;
+		GUI_Process();
+	}
+	else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
+	{
+		pressed = false;
+		GUI_Process();
+	}
+	else if ((pos.y != -1) && (pressed == true))
+	{
+		GUI_Process_Move();
+	}
+	curFrame->updateControl();
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+AudioOutput_t updateAudio()
+{
+	return curFrame->updateAudio();
 }

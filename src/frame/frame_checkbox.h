@@ -1,36 +1,38 @@
-#ifndef _FRAME_WIFIMAN_H_
-#define _FRAME_WIFIMAN_H_
+#ifndef _FRAME_CHECKBOX_H_
+#define _FRAME_CHECKBOX_H_
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Wifi-Manager
+* Frame: Checkbox-Test
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
+#include <MozziGuts.h>
+
 #include "frame_base.h"
 #include "../gui/gui.h"
 
 /******************************************************************************
 * Class Definition
 *******************************************************************************/
-class Frame_WifiMan : public Frame_Base
+
+class Frame_Checkbox : public Frame_Base
 {
 	public:
-		Frame_WifiMan();
-		~Frame_WifiMan();
+		Frame_Checkbox();
+		~Frame_Checkbox();
 		int init(gui_args_vector_t &args);
 		int run();
+		void updateControl();
+		AudioOutput_t updateAudio();
 
 	private:
-		GUI_List *_list;
-		GUI_Button *_but[4];
-		GUI_Slider *_slider;
-		GUI_String *_string;
-		GUI_Checkbox *_cb;
+		GUI_Button *_but[2];
+		GUI_Checkbox *_cb[8 * 8];
 };
 
 #endif

@@ -12,10 +12,12 @@
 * Header-Files
 *******************************************************************************/
 #include <Arduino.h>
+#include <MozziGuts.h>
 
 #include "../main.h"
 #include "../M5Settings.h"
 #include "../gui/gui_button.h"
+#include "../gui/gui_checkbox.h"
 #include "../gui/gui_imgbutton.h"
 #include "../gui/gui_list.h"
 #include "../gui/gui_slider.h"
@@ -39,8 +41,14 @@ class Frame_Base
 		virtual int run();
 		virtual void exit();
 		virtual int init(gui_args_vector_t &args) = 0;
+
+		virtual void updateControl();
+		virtual AudioOutput_t updateAudio();
+
 		String GetFrameName() { return _frame_name; }
 		int isRun() { return _is_run; }
+		boolean hasMozzi() { return _hasMozzi; }
+
 		void SetFrameID(uint32_t id) { _frame_id = id; }
 		uint32_t GetFrameID() { return _frame_id; }
 		void StatusBar();
@@ -50,6 +58,7 @@ class Frame_Base
 		static void exit_cb(gui_args_vector_t &args);
 		String _frame_name;
 		int _is_run = 1;
+		boolean _hasMozzi = false;
 		GUI_Button *_key_exit = NULL;
 		uint32_t _frame_id;
 		uint32_t _time;

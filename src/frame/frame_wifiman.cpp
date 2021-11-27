@@ -150,9 +150,11 @@ Frame_WifiMan::Frame_WifiMan(void)
 	_but[2]->AddArgs(EVENT_RELEASED, 1, _slider);
 	_but[2]->Bind(EVENT_RELEASED, &but_rescan);
 
-	_but[3] = new GUI_Button("Exit", 10 + 200 + 28 + 8, 8 + (2 * 24) + (1 * 32) + 8, 64, 32);
+	_but[3] = new GUI_Button("Exit", 10 + 200 + 28 + 8, 8 + (2 * 24) + (1 * 32) + (1 * 8), 64, 32);
 	_but[3]->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
 	_but[3]->Bind(EVENT_RELEASED, &Frame_Base::exit_cb);
+
+	_cb = new GUI_Checkbox("Ok?", 10 + 200 + 28 + 8 + 32, 8 + (2 * 24) + (2 * 32) + (2 * 8), PM_LEFT);
 
 	exitbtn();
 	_key_exit->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
@@ -190,6 +192,10 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 	GUI_AddObject(_string);
 	_string->init();
 
+	GUI_AddObject(_cb);
+	_cb->init();
+
+	/*
 	if (wifiNetworkList.size() > 0)
 	{
 		for (uint8_t i = 0; i < wifiNetworkList.size(); i++)
@@ -199,18 +205,18 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 			_list->addItem(s);
 		}
 	}
-
-	/*
+	*/
 	for (uint8_t i = 0; i < 20; i++)
 	{
 		String s = "Item" + String(i + 1);
 		_list->addItem(s);
 	}
-	*/
+
 
 	// configure Slider
 	_slider->setMin(0);
-	_slider->setMax(_list->getSize());
+	//_slider->setMax(_list->getSize());
+	_slider->setMax(20);
 	_slider->setLevel(0);
 	_slider->setSelectedMin(0);
 	_slider->calculate();

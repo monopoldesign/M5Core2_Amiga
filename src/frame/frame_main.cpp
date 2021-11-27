@@ -18,6 +18,8 @@
 #include "frame_sysinfo.h"
 #include "frame_wifiman.h"
 #include "frame_windemo.h"
+#include "frame_checkbox.h"
+#include "frame_audio.h"
 
 /******************************************************************************
 * Functions
@@ -106,6 +108,38 @@ void key_app4_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void key_app5_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_Checkbox");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_Checkbox();
+		GUI_AddFrame("Frame_Checkbox", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void key_app6_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_Audio");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_Audio();
+		GUI_AddFrame("Frame_Audio", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_Main::Frame_Main(void): Frame_Base()
 {
 	_frame_name = "Frame_Main";
@@ -172,6 +206,12 @@ Frame_Main::Frame_Main(void): Frame_Base()
 
 	_key[4]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[4]->Bind(EVENT_RELEASED, key_app4_cb);
+
+	_key[5]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[5]->Bind(EVENT_RELEASED, key_app5_cb);
+
+	_key[6]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[6]->Bind(EVENT_RELEASED, key_app6_cb);
 
 	_time = millis();
 
