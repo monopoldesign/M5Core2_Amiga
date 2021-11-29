@@ -51,6 +51,9 @@ LinkedList<wifiNetwork *> wifiNetworkList = LinkedList<wifiNetwork *>();
 ------------------------------------------------------------------------------*/
 void m5wifi_initWifi(void)
 {
+	WiFi.disconnect();
+	WiFi.softAPdisconnect(true);
+
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(globalSettings->wifiSsid, globalSettings->wifiPwd);
 

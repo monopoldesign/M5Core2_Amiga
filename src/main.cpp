@@ -88,9 +88,9 @@ void setup()
 
 	m5set_loadSettings();
 
-	//m5wifi_scanWifi();
-	//m5wifi_findWifi();
-	//m5wifi_printWifiList();
+	m5wifi_scanWifi();
+	m5wifi_findWifi();
+	m5wifi_printWifiList();
 
 	if (m5wifi_setWifi())
 	{

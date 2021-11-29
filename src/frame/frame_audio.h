@@ -17,7 +17,7 @@
 /******************************************************************************
 * Class Definition
 *******************************************************************************/
-enum AType{AT_NONE, AT_RTTTL, AT_MP3};
+enum AType{AT_NONE, AT_RTTTL, AT_MP3, AT_STREAM, AT_TALKIE, AT_SAM};
 
 class Frame_Audio : public Frame_Base
 {
@@ -30,8 +30,9 @@ class Frame_Audio : public Frame_Base
 		//AudioOutput_t updateAudio();
 
 	private:
-		GUI_Button *_but[4];
+		GUI_Button *_but[8];
 		uint8_t _atype;
+		float _volume;
 };
 
 #endif

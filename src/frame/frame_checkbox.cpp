@@ -64,8 +64,6 @@ Frame_Checkbox::~Frame_Checkbox(void)
 ------------------------------------------------------------------------------*/
 int Frame_Checkbox::init(gui_args_vector_t &args)
 {
-	wifiNetwork *_wn;
-
 	_is_run = 1;
 
 	// Window

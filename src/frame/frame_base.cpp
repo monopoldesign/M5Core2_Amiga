@@ -169,6 +169,7 @@ void Frame_Base::StatusBar()
 	{
 		_time = millis();
 
+		/*
 		if (globalSettings->isWifiConnected)
 		{
 			M5.Axp.SetLed(0);
@@ -178,6 +179,7 @@ void Frame_Base::StatusBar()
 
 			M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[0]);
 		}
+		*/
 
 		getLocalTime(&timeinfo);
 
