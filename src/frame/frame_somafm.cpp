@@ -155,11 +155,11 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 	_cycle->setSelectedItem(0);
 	_cycle->Draw();
 
-	// String
+	// Button
 	GUI_AddObject(_but);
 	_but->init();
 
-	// Buttons
+	// String
 	for (uint8_t i = 0; i < 2; i++)
 	{
 		GUI_AddObject(_string[i]);
