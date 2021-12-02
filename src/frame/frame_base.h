@@ -18,6 +18,7 @@
 #include "../M5Settings.h"
 #include "../gui/gui_button.h"
 #include "../gui/gui_checkbox.h"
+#include "../gui/gui_cycle.h"
 #include "../gui/gui_imgbutton.h"
 #include "../gui/gui_list.h"
 #include "../gui/gui_slider.h"

@@ -89,8 +89,7 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 
@@ -104,8 +103,7 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 
@@ -118,8 +116,7 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_BLACK);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 
@@ -158,8 +155,7 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
-				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
@@ -173,8 +169,7 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
-				M5.Lcd.drawLine(_x, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
-				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
+				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
@@ -188,7 +183,6 @@ void GUI_Button::Draw()
 				M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
 				M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
 				M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
-				M5.Lcd.drawLine(_x + 1, _y + _h - 2, _x + _w - 1, _y + _h - 2, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
 				M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
@@ -275,4 +269,13 @@ void GUI_Button::AddArgs(int16_t event, uint16_t n, void* arg)
 		else
 			_released_cb_args.push_back(arg);
 	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_Button::setLabel(String label)
+{
+	_label = label;
+	Draw();
 }

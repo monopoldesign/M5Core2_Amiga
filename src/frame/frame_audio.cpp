@@ -17,11 +17,14 @@
 #include <AudioGeneratorRTTTL.h>
 #include <AudioGeneratorMP3.h>
 #include <AudioGeneratorTalkie.h>
+#include <AudioGeneratorMOD.h>
 #include <ESP8266SAM.h>
 #include <AudioOutputI2S.h>
 
 #include "main.h"
 #include "frame_audio.h"
+
+#include "../enigma.h"
 
 /******************************************************************************
 * Global Variables
@@ -31,14 +34,16 @@ AudioFileSourcePROGMEM *file;
 
 AudioFileSourceSD *source;
 AudioFileSourceID3 *id3;
-AudioGeneratorMP3 *mp3;
 
+AudioGeneratorMP3 *mp3;
 AudioGeneratorTalkie *talkie;
 
 ESP8266SAM *sam;
 
 AudioFileSourceICYStream *stream;
 AudioFileSourceBuffer *streamBuf;
+
+AudioGeneratorMOD *mod;
 
 AudioOutputI2S *out;
 
@@ -106,6 +111,10 @@ void stopAny(gui_args_vector_t &args)
 			mp3->stop();
 			delete streamBuf;
 			delete stream;
+			break;
+		case AT_MOD:
+			mod->stop();
+			delete file;
 			break;
 	}
 }
@@ -177,7 +186,7 @@ void but_play5(gui_args_vector_t &args)
 
 	sam = new ESP8266SAM;
 	sam->SetVoice(VOICE_SAM);
-	sam->Say(out, "1 2 3 Techno.");
+	sam->Say(out, "Can you hear me ?");
 
 	*((uint8_t *)(args[0])) = AT_SAM;
 }
@@ -187,15 +196,16 @@ void but_play5(gui_args_vector_t &args)
 ------------------------------------------------------------------------------*/
 void but_play6(gui_args_vector_t &args)
 {
-	out->begin();
+	stopAny(args);
 
-	sam = new ESP8266SAM;
-	sam->SetVoice(VOICE_ET);
-	sam->Say(out, "Can you hear me ?");
-	delay(1000);
-	delete sam;
+	file = new AudioFileSourcePROGMEM(enigma_mod, sizeof(enigma_mod));
 
-	*((uint8_t *)(args[0])) = AT_SAM;
+	mod->SetBufferSize(3 * 1024);
+	mod->SetSampleRate(44100);
+	mod->SetStereoSeparation(32);
+	mod->begin(file, out);
+
+	*((uint8_t *)(args[0])) = AT_MOD;
 }
 
 /*------------------------------------------------------------------------------
@@ -233,7 +243,7 @@ Frame_Audio::Frame_Audio(void)
 
 	_but[4] = new GUI_Button("Talkie", 32 + 120 + 16, 20 + (2 * 24) + (0 * 32), 120, 32);
 	_but[5] = new GUI_Button("SAM", 32 + 120 + 16, 20 + (2 * 24) + (1 * 32) + (1 * 8), 120, 32);
-	_but[6] = new GUI_Button("SAM2", 32 + 120 + 16, 20 + (2 * 24) + (2 * 32) + (2 * 8), 120, 32);
+	_but[6] = new GUI_Button("MOD", 32 + 120 + 16, 20 + (2 * 24) + (2 * 32) + (2 * 8), 120, 32);
 	_but[7] = new GUI_Button("Exit", 32 + 120 + 16, 20 + (2 * 24) + (3 * 32) + (3 * 8), 120, 32);
 
 	_but[0]->AddArgs(EVENT_RELEASED, 0, (void *)(&_atype));
@@ -303,6 +313,8 @@ int Frame_Audio::init(gui_args_vector_t &args)
 
 	talkie = new AudioGeneratorTalkie();
 
+	mod = new AudioGeneratorMOD();
+
 	return 3;
 }
 
@@ -347,6 +359,13 @@ int Frame_Audio::run()
 			{
 				if (!mp3->loop())
 					mp3->stop();
+			}
+			break;
+		case AT_MOD:
+			if (mod->isRunning())
+			{
+				if (!mod->loop())
+					mod->stop();
 			}
 			break;
 	}

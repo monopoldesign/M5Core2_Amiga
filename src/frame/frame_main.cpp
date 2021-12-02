@@ -20,6 +20,7 @@
 #include "frame_windemo.h"
 #include "frame_checkbox.h"
 #include "frame_audio.h"
+#include "frame_somafm.h"
 
 /******************************************************************************
 * Functions
@@ -140,6 +141,22 @@ void key_app6_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void key_app7_cb(gui_args_vector_t &args)
+{
+	Frame_Base *frame = GUI_GetFrame("Frame_SomaFM");
+
+	if (frame == NULL)
+	{
+		frame = new Frame_SomaFM();
+		GUI_AddFrame("Frame_SomaFM", frame);
+	}
+	GUI_PushFrame(frame);
+	*((int*)(args[0])) = 0;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_Main::Frame_Main(void): Frame_Base()
 {
 	_frame_name = "Frame_Main";
@@ -212,6 +229,9 @@ Frame_Main::Frame_Main(void): Frame_Base()
 
 	_key[6]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[6]->Bind(EVENT_RELEASED, key_app6_cb);
+
+	_key[7]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
+	_key[7]->Bind(EVENT_RELEASED, key_app7_cb);
 
 	_time = millis();
 

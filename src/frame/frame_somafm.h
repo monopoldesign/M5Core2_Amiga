@@ -1,37 +1,49 @@
-#ifndef _FRAME_AUDIO_H_
-#define _FRAME_AUDIO_H_
+#ifndef _FRAME_SOMAFM_H_
+#define _FRAME_SOMAFM_H_
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* Frame: Audio-Test
+* Frame: SomaFM-Player
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
+#include <Arduino.h>
+#include <LinkedList.h>
+
 #include "frame_base.h"
 #include "../gui/gui.h"
 
 /******************************************************************************
-* Class Definition
+* Definitions
 *******************************************************************************/
-enum AType{AT_NONE, AT_RTTTL, AT_MP3, AT_STREAM, AT_TALKIE, AT_SAM, AT_MOD};
-
-class Frame_Audio : public Frame_Base
+class somaStation
 {
 	public:
-		Frame_Audio();
-		~Frame_Audio();
+		char name[16];
+		char url[64];
+};
+
+/******************************************************************************
+* Class Definition
+*******************************************************************************/
+class Frame_SomaFM : public Frame_Base
+{
+	public:
+		Frame_SomaFM();
+		~Frame_SomaFM();
 		int init(gui_args_vector_t &args);
 		int run();
-		//void updateControl();
-		//AudioOutput_t updateAudio();
+		void loadStations(void);
 
 	private:
-		GUI_Button *_but[8];
-		uint8_t _atype;
+		GUI_Cycle *_cycle;
+		GUI_String *_string[2];
+		GUI_Button *_but;
+		boolean _isPlaying;
 		float _volume;
 };
 

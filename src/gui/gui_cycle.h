@@ -1,17 +1,18 @@
-#ifndef _GUI_BUTTON_H
-#define _GUI_BUTTON_H
+#ifndef _GUI_CYCLE_H
+#define _GUI_CYCLE_H
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* GUI-Button-Class
+* GUI-Cycle-Class
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
 #include <M5Core2.h>
+#include <LinkedList.h>
 
 #include "main.h"
 #include "gui_base.h"
@@ -19,21 +20,28 @@
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-enum BUTTYPE {BUT_NORMAL, BUT_CLOSEW, BUT_ARROWUP, BUT_ARROWDOWN};
+struct CycleItem
+{
+	char item[32];
+};
 
-class GUI_Button : public GUI_Base
+class GUI_Cycle : public GUI_Base
 {
 	public:
-		GUI_Button(uint8_t type, int16_t x, int16_t y, int16_t w, int16_t h);
-		GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h);
-		~GUI_Button();
+		GUI_Cycle(String label, int16_t x, int16_t y, int16_t w, int16_t h, uint8_t placement);
+		GUI_Cycle(int16_t x, int16_t y, int16_t w, int16_t h);
+		~GUI_Cycle();
 		void init();
 		void Draw();
-		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
 		void UpdateState(TouchPoint_t pos);
 		void UpdatePosition(TouchPoint_t pos);
+		void addItem(String item);
+		void clearItemList(void);
+		void setSelectedItem(uint8_t item);
+		uint8_t getSelectedItem(void);
+		String getSelectedItemString(void);
+		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
 		void AddArgs(int16_t event, uint16_t n, void *arg);
-		void setLabel(String label);
 
 	private:
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
@@ -41,8 +49,10 @@ class GUI_Button : public GUI_Base
 		gui_args_vector_t _pressed_cb_args;
 		gui_args_vector_t _released_cb_args;
 		int16_t _state = EVENT_NONE;
-		uint8_t _type;
 		String _label;
+		uint8_t _placement;
+		uint8_t _selectedItem;
+		LinkedList<CycleItem *> _itemList;
 		HotZone *_buttonZone;
 };
 

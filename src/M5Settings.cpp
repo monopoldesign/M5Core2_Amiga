@@ -68,14 +68,9 @@ void m5set_loadSettings(void)
 
 		dataFile.close();
 
-		uint8_t _size = atoi(doc[0]["ssid"]);
 		m5set_clearSettings();
 
-		_swn = new savedWifiNetwork();
-		sprintf(_swn->ssid, "%d", _size);
-		savedWifiNetworkList.add(_swn);
-
-		for (uint8_t i = 1; i < _size; i++)
+		for (uint8_t i = 0; i < doc.size(); i++)
 		{
 			_swn = new savedWifiNetwork();
 			strlcpy(_swn->ssid, doc[i]["ssid"], sizeof(_swn->ssid));

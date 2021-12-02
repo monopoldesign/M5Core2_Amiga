@@ -14,7 +14,6 @@
 #include "gui_base.h"
 #include "gui_button.h"
 #include "../frame/frame_base.h"
-#include "../frame/frame_checkbox.h"
 
 /******************************************************************************
 * Definitions
