@@ -29,7 +29,8 @@ AudioOutputI2S *fsfm_out;
 
 char fsfm_URL[64];
 char streamTitle[128];
-boolean metaChange;
+boolean __metaChange = false;
+boolean __saveConfig = false;
 
 /******************************************************************************
 * Functions
@@ -45,7 +46,7 @@ void fsfm_MDCallback(void *cbData, const char *type, bool isUnicode, const char 
 	strncpy_P(s2, string, sizeof(s2));
 	s2[sizeof(s2)-1]=0;
 	sprintf(streamTitle, "%s", s2);
-	metaChange = true;
+	__metaChange = true;
 }
 
 /*------------------------------------------------------------------------------
@@ -89,11 +90,43 @@ void fsfm_play(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void cycle_press(gui_args_vector_t &args)
+{
+	somaStation *_ss;
+	GUI_Cycle *_cy = (GUI_Cycle *)(args[1]);
+	GUI_Button *_but = (GUI_Button *)(args[2]);
+
+	if (*((boolean *)(args[0])))
+	{
+		fsfm_mp3->stop();
+		delete fsfm_streamBuf;
+		delete fsfm_stream;
+	}
+
+
+	if (stationList.size() > 0)
+	{
+		_ss = stationList.get(_cy->getSelectedItem());
+		strlcpy(fsfm_URL, _ss->url, sizeof(fsfm_URL));
+	}
+
+	fsfm_stream = new AudioFileSourceICYStream(fsfm_URL);
+	fsfm_streamBuf = new AudioFileSourceBuffer(fsfm_stream, 4096);
+	fsfm_stream->RegisterMetadataCB(fsfm_MDCallback, (void*)"ICY");
+	fsfm_mp3->begin(fsfm_streamBuf, fsfm_out);
+
+	_but->setLabel("Stop");
+	*((boolean *)(args[0])) = true;
+	__saveConfig = true;
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_SomaFM::Frame_SomaFM(void)
 {
 	_frame_name = "Frame_SomaFM";
 	_isPlaying = false;
-	metaChange = false;
 
 	_string[0] = new GUI_String("\0", "\0", 4 + 8, (2 * 24) + 56 + (3 * 8) + (1 * 32), 320 - 8 - 16, 32);
 	_cycle = new GUI_Cycle(4 + 8, (2 * 24) + 8 + 56 + 8, 320 - 8 - 16, 32);
@@ -108,6 +141,11 @@ Frame_SomaFM::Frame_SomaFM(void)
 	_but->AddArgs(EVENT_RELEASED, 1, _cycle);
 	_but->AddArgs(EVENT_RELEASED, 2, _but);
 	_but->Bind(EVENT_RELEASED, &fsfm_play);
+
+	_cycle->AddArgs(EVENT_RELEASED, 0, (void *)(&_isPlaying));
+	_cycle->AddArgs(EVENT_RELEASED, 1, _cycle);
+	_cycle->AddArgs(EVENT_RELEASED, 2, _but);
+	_cycle->Bind(EVENT_RELEASED, &cycle_press);
 }
 
 /*------------------------------------------------------------------------------
@@ -125,7 +163,6 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 	somaStation *_ss;
 	
 	_is_run = 1;
-	_volume = 10.0;
 
 	loadStations();
 
@@ -152,9 +189,6 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 		}
 	}
 
-	_cycle->setSelectedItem(0);
-	_cycle->Draw();
-
 	// Button
 	GUI_AddObject(_but);
 	_but->init();
@@ -166,6 +200,13 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 		_string[i]->init();
 	}
 
+	// setup UI from config-file
+	loadConfig();
+	_string[1]->setValue(_volume);
+	_string[1]->Draw();
+	_cycle->Draw();
+
+	// setup Audio
 	fsfm_out = new AudioOutputI2S();
 	fsfm_out->SetPinout(12, 0, 2);
 	fsfm_out->SetOutputModeMono(true);
@@ -187,23 +228,25 @@ int Frame_SomaFM::run()
 
 	if (M5.BtnA.wasPressed())
 	{
-		_volume -= 1.0;
+		_volume --;
 
 		if (_volume < 0)
-			_volume = 10.0;
+			_volume = 10;
 
-		fsfm_out->SetGain(_volume * 0.05);
-		_string[1]->setValue((uint32_t)_volume);
+		fsfm_out->SetGain((float)_volume * 0.05);
+		_string[1]->setValue(_volume);
+		__saveConfig = true;
 	}
 	else if (M5.BtnC.wasPressed())
 	{
-		_volume += 1.0;
+		_volume ++;
 
-		if (_volume > 10.0)
-			_volume = 1.0;
+		if (_volume > 10)
+			_volume = 0;
 
-		fsfm_out->SetGain(_volume * 0.05);
-		_string[1]->setValue((uint32_t)_volume);
+		fsfm_out->SetGain((float)_volume * 0.05);
+		_string[1]->setValue(_volume);
+		__saveConfig = true;
 	}
 
 	if (_isPlaying)
@@ -213,12 +256,18 @@ int Frame_SomaFM::run()
 			if (!fsfm_mp3->loop())
 				fsfm_mp3->stop();
 
-			if (metaChange)
+			if (__metaChange)
 			{
-				metaChange = false;
+				__metaChange = false;
 				_string[0]->setValue(streamTitle);
 			}
 		}
+	}
+
+	if (__saveConfig)
+	{
+		__saveConfig = false;
+		saveConfig();
 	}
 
 	return 1;
@@ -266,4 +315,50 @@ void Frame_SomaFM::loadStations(void)
 			stationList.add(_ss);
 		}
 	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void Frame_SomaFM::loadConfig(void)
+{
+	String fileName = "/SomaPly.json";
+	DynamicJsonDocument doc(128);
+
+	if (SPIFFS.exists(fileName))
+	{
+		File dataFile = SPIFFS.open(fileName, "r");
+
+		DeserializationError error = deserializeJson(doc, dataFile);
+
+		if (error)
+		{
+			Serial.println("Failed to read file!");
+			return;
+		}
+
+		dataFile.close();
+
+		_cycle->setSelectedItem(doc[0]["station"]);
+		_volume = doc[0]["volume"];
+	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void Frame_SomaFM::saveConfig(void)
+{
+	String fileName = "/SomaPly.json";
+	DynamicJsonDocument doc(128);
+
+	File dataFile = SPIFFS.open(fileName, "w");
+
+	doc[0]["station"] = _cycle->getSelectedItem();
+	doc[0]["volume"] = _volume;
+
+	if (serializeJson(doc, dataFile) == 0)
+		Serial.println(F("Failed to write to file"));
+
+	dataFile.close();
 }

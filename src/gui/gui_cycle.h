@@ -52,6 +52,7 @@ class GUI_Cycle : public GUI_Base
 		String _label;
 		uint8_t _placement;
 		uint8_t _selectedItem;
+		boolean _isSelected;
 		LinkedList<CycleItem *> _itemList;
 		HotZone *_buttonZone;
 };

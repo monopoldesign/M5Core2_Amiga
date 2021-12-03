@@ -149,9 +149,6 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 		{
 			if (_state == EVENT_NONE)
 			{
-				_selectedItem = i + _selectedMin;
-				_isSelected = true;
-
 				_state = EVENT_PRESSED;
 				Draw();
 
@@ -163,6 +160,9 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 		{
 			if (_state == EVENT_PRESSED)
 			{
+				_selectedItem = i + _selectedMin;
+				_isSelected = true;
+
 				_state = EVENT_NONE;
 				Draw();
 

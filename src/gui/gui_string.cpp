@@ -97,7 +97,7 @@ void GUI_String::Draw()
 		M5.Lcd.setTextColor(MWB_BLACK);
 
 		uint8_t _ys = (_h / 2) + 5;
-		M5.Lcd.setCursor(_x + 4, _y + _ys);
+		M5.Lcd.setCursor(_x + 8, _y + _ys);
 		memset(_buffer, '\0', sizeof(_buffer));
 		strncpy(_buffer, _content.c_str(), _maxLen);
 		M5.Lcd.print(_buffer);

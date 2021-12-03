@@ -222,6 +222,8 @@ void GUI_Cycle::UpdateState(TouchPoint_t pos)
 		{
 			_state = EVENT_NONE;
 
+			_isSelected = true;
+
 			_selectedItem++;
 
 			if (_selectedItem > _itemList.size() - 1)
