@@ -247,10 +247,9 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 ------------------------------------------------------------------------------*/
 int Frame_SomaFM::run()
 {
-	//Frame_Base::run();
+	Frame_Base::run();
 
 	M5.update();
-
 
 	if (M5.BtnA.wasPressed())
 	{

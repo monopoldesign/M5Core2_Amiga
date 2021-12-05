@@ -167,7 +167,7 @@ void Frame_Base::StatusBar()
 
 	M5.Lcd.drawBitmap(272, 0, 22, 22, Battery4_22x22);
 
-	if (millis() - _time > 10000)
+	if (millis() - _time > 30000)
 	{
 		_time = millis();
 
@@ -183,18 +183,11 @@ void Frame_Base::StatusBar()
 		}
 		*/
 
-		getLocalTime(&timeinfo);
-
-		if (timeinfo.tm_min != globalSettings->mins)
-		{
-			globalSettings->hour = timeinfo.tm_hour;
-			globalSettings->mins = timeinfo.tm_min;
-
-			M5.Lcd.fillRect(196, 0, 50, 22, MWB_WHITE);
-			sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
-			M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
-			M5.Lcd.print(buffer);
-		}
+		m5rtc_getTime();
+		M5.Lcd.fillRect(196, 0, 50, 22, MWB_WHITE);
+		sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
+		M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
+		M5.Lcd.print(buffer);
 	}
 }
 
@@ -246,12 +239,6 @@ void Frame_Base::init_StatusBar()
 
 	M5.Lcd.drawBitmap(272, 0, 22, 22, Battery4_22x22);
 
-	_time = millis();
-	getLocalTime(&timeinfo);
-
-	globalSettings->hour = timeinfo.tm_hour;
-	globalSettings->mins = timeinfo.tm_min;
-
 	M5.Lcd.fillRect(194, 0, 50, 22, MWB_WHITE);
 	sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
 	M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
@@ -265,18 +252,4 @@ void Frame_Base::exit_cb(gui_args_vector_t &args)
 {
 	GUI_PopFrame();
 	*((int *)(args[0])) = 0;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void Frame_Base::updateControl()
-{
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-AudioOutput_t Frame_Base::updateAudio()
-{
 }

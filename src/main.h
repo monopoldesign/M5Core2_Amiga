@@ -23,13 +23,12 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include <Arduino.h>
+#include <M5Core2.h>
 #include <LinkedList.h>
 
 /******************************************************************************
 * Prototypes
 *******************************************************************************/
-bool InitI2SSpeakerOrMic(int mode);
 
 /******************************************************************************
 * Definitions
@@ -38,10 +37,6 @@ bool InitI2SSpeakerOrMic(int mode);
 #define CONFIG_I2S_LRCK_PIN 0
 #define CONFIG_I2S_DATA_PIN 2
 #define CONFIG_I2S_DATA_IN_PIN 34
-
-#define Speak_I2S_NUMBER I2S_NUM_0
-#define MODE_MIC 0
-#define MODE_SPK 1
 
 #define MWB_GRAY	0x9492
 #define MWB_BLACK	0x0000

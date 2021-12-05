@@ -38,16 +38,16 @@ RTC_DateTypeDef RTCDate;
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void m5rtc_setupTime(void)
+void m5rtc_setupTime(struct tm ti)
 {
-	RTCDate.Year = timeinfo.tm_year;
-	RTCDate.Month = timeinfo.tm_mon;
-	RTCDate.Date = timeinfo.tm_mday;
+	RTCDate.Year = ti.tm_year;
+	RTCDate.Month = ti.tm_mon;
+	RTCDate.Date = ti.tm_mday;
 	M5.Rtc.SetDate(&RTCDate);
 
-	RTCtime.Hours = timeinfo.tm_hour;
-	RTCtime.Minutes = timeinfo.tm_min;
-	RTCtime.Seconds = timeinfo.tm_sec;
+	RTCtime.Hours = ti.tm_hour;
+	RTCtime.Minutes = ti.tm_min;
+	RTCtime.Seconds = ti.tm_sec;
 	M5.Rtc.SetTime(&RTCtime);
 }
 

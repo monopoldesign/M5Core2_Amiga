@@ -11,8 +11,6 @@
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
-#include <MozziGuts.h>
-
 #include "frame_base.h"
 #include "../gui/gui.h"
 
@@ -27,8 +25,6 @@ class Frame_Checkbox : public Frame_Base
 		~Frame_Checkbox();
 		int init(gui_args_vector_t &args);
 		int run();
-		void updateControl();
-		AudioOutput_t updateAudio();
 
 	private:
 		GUI_Button *_but[2];

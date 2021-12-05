@@ -232,16 +232,6 @@ Frame_Main::Frame_Main(void): Frame_Base()
 
 	_key[7]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[7]->Bind(EVENT_RELEASED, key_app7_cb);
-
-	_time = millis();
-
-	if (globalSettings->isNTPTime)
-	{
-		M5.Lcd.setFreeFont(&FreeSans9pt7b);
-		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-		M5.Lcd.setCursor(194, 16);
-		M5.Lcd.print(buffer);
-	}
 }
 
 /*------------------------------------------------------------------------------
@@ -316,6 +306,7 @@ void Frame_Main::AppName()
 int Frame_Main::init(gui_args_vector_t &args)
 {
 	_is_run = 1;
+	_time = millis();
 
 	M5.Lcd.setFreeFont(&FreeSans9pt7b);
 	Frame_Base::init_StatusBar();
@@ -328,12 +319,9 @@ int Frame_Main::init(gui_args_vector_t &args)
 
 	_time = millis();
 
-	if (globalSettings->isNTPTime)
-	{
-		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-		M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
-		M5.Lcd.print(buffer);
-	}
+	sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
+	M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
+	M5.Lcd.print(buffer);
 
 	AppName();
 	return 9;

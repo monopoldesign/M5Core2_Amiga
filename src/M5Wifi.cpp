@@ -22,8 +22,6 @@
 *******************************************************************************/
 #include <M5Core2.h>
 
-#include "main.h"
-#include "M5RTC.h"
 #include "M5Settings.h"
 #include "M5Wifi.h"
 
@@ -232,10 +230,8 @@ void m5wifi_getNTPTime(void)
 		else
 		{
 			globalSettings->isNTPTime = true;
-			globalSettings->hour = timeinfo.tm_hour;
-			globalSettings->hour = timeinfo.tm_min;
-
-			m5rtc_setupTime();
+			m5rtc_setupTime(timeinfo);
+			m5rtc_getTime();
 		}
 	}
 	else

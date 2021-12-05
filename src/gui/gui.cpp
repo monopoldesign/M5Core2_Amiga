@@ -122,28 +122,21 @@ void GUI_Run(Frame_Base* frame)
 			return;
 		}
 
-		if (frame->hasMozzi())
-		{
-			audioHook();
-		}
-		else
-		{
-			pos = M5.Touch.getPressPoint();
+		pos = M5.Touch.getPressPoint();
 
-			if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
-			{
-				pressed = true;
-				GUI_Process();
-			}
-			else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
-			{
-				pressed = false;
-				GUI_Process();
-			}
-			else if ((pos.y != -1) && (pressed == true))
-			{
-				GUI_Process_Move();
-			}
+		if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
+		{
+			pressed = true;
+			GUI_Process();
+		}
+		else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
+		{
+			pressed = false;
+			GUI_Process();
+		}
+		else if ((pos.y != -1) && (pressed == true))
+		{
+			GUI_Process_Move();
 		}
 	}
 }
@@ -211,36 +204,4 @@ void GUI_PopFrame(bool isDelete)
 void GUI_UpdateGlobalLastActiveTime()
 {
 	g_last_active_time_millis = millis();
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void updateControl()
-{
-	pos = M5.Touch.getPressPoint();
-
-	if ((pos.x != -1) && (pos.y != -1) && (pressed == false))
-	{
-		pressed = true;
-		GUI_Process();
-	}
-	else if ((pos.x == -1) && (pos.y == -1) && (pressed == true))
-	{
-		pressed = false;
-		GUI_Process();
-	}
-	else if ((pos.y != -1) && (pressed == true))
-	{
-		GUI_Process_Move();
-	}
-	curFrame->updateControl();
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-AudioOutput_t updateAudio()
-{
-	return curFrame->updateAudio();
 }

@@ -10,17 +10,12 @@
 *******************************************************************************/
 #include <M5Core2.h>
 
-#include <Oscil.h>
-#include <tables/sin2048_int8.h>
-
 #include "main.h"
 #include "frame_checkbox.h"
 
 /******************************************************************************
 * Global Variables
 *******************************************************************************/
-Oscil<SIN2048_NUM_CELLS, AUDIO_RATE> aSin(SIN2048_DATA);
-uint8_t gain = 255;
 
 /******************************************************************************
 * Functions
@@ -32,7 +27,6 @@ uint8_t gain = 255;
 Frame_Checkbox::Frame_Checkbox(void)
 {
 	_frame_name = "Frame_Checkbox";
-	_hasMozzi = true;
 
 	for (uint8_t y = 0; y < 7; y++)
 	{
@@ -48,8 +42,6 @@ Frame_Checkbox::Frame_Checkbox(void)
 	exitbtn();
 	_key_exit->AddArgs(EVENT_RELEASED, 0, (void *)(&_is_run));
 	_key_exit->Bind(EVENT_RELEASED, &Frame_Base::exit_cb);
-
-	aSin.setFreq(1760);
 }
 
 /*------------------------------------------------------------------------------
@@ -95,20 +87,4 @@ int Frame_Checkbox::run()
 	//Frame_Base::run();
 
 	return 1;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-void Frame_Checkbox::updateControl()
-{
-	gain -= 3;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-AudioOutput_t Frame_Checkbox::updateAudio()
-{
-	return MonoOutput::from16Bit(aSin.next() * gain);
 }
