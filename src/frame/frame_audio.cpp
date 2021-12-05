@@ -11,6 +11,7 @@
 #include <M5Core2.h>
 #include <AudioFileSourcePROGMEM.h>
 #include <AudioFileSourceSD.h>
+#include <AudioFileSourceSPIFFS.h>
 #include <AudioFileSourceID3.h>
 #include <AudioFileSourceICYStream.h>
 #include <AudioFileSourceBuffer.h>
@@ -31,29 +32,19 @@
 *******************************************************************************/
 AudioGeneratorRTTTL *rtttl;
 AudioFileSourcePROGMEM *file;
-
-AudioFileSourceSD *source;
+AudioFileSourceSD *sourceSD;
+AudioFileSourceSPIFFS *sourceSPIFFS;
 AudioFileSourceID3 *id3;
-
 AudioGeneratorMP3 *mp3;
 AudioGeneratorTalkie *talkie;
-
 ESP8266SAM *sam;
-
 AudioFileSourceICYStream *stream;
 AudioFileSourceBuffer *streamBuf;
-
 AudioGeneratorMOD *mod;
-
 AudioOutputI2S *out;
 
-const char melody0[] PROGMEM = "Knight Rider:d=32,o=5,b=63:16e,f,e,8b,16e6,f6,e6,8b,16e,f,e,16b,16e6,4d6,8p,4p,16e,f,e,8b,16e6,f6,e6,8b,16e,f,e,16b,16e6,4f6";
 const char melody1[] PROGMEM = "Mission Impossible:d=16,o=5,b=100:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,8p,a#,p,c6,p,g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c6,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,g,2c,p,a#4,c";
-
-//const char *URL="http://kvbstreams.dyndns.org:8000/wkvi-am";
-//const char *URL="http://ice2.somafm.com/christmas-128-mp3";
 const char *URL="http://ice4.somafm.com/synphaera-128-mp3";
-
 uint8_t spREADY[] PROGMEM = {0x6A,0xB4,0xD9,0x25,0x4A,0xE5,0xDB,0xD9,0x8D,0xB1,0xB2,0x45,0x9A,0xF6,0xD8,0x9F,0xAE,0x26,0xD7,0x30,0xED,0x72,0xDA,0x9E,0xCD,0x9C,0x6D,0xC9,0x6D,0x76,0xED,0xFA,0xE1,0x93,0x8D,0xAD,0x51,0x1F,0xC7,0xD8,0x13,0x8B,0x5A,0x3F,0x99,0x4B,0x39,0x7A,0x13,0xE2,0xE8,0x3B,0xF5,0xCA,0x77,0x7E,0xC2,0xDB,0x2B,0x8A,0xC7,0xD6,0xFA,0x7F};
 
 /******************************************************************************
@@ -126,8 +117,8 @@ void but_play0(gui_args_vector_t &args)
 {
 	stopAny(args);
 
-	source->open("/Yua.mp3");
-	id3 = new AudioFileSourceID3(source);
+	sourceSD->open("/Yua.mp3");
+	id3 = new AudioFileSourceID3(sourceSD);
 	mp3->begin(id3, out);
 
 	*((uint8_t *)(args[0])) = AT_MP3;
@@ -199,10 +190,12 @@ void but_play6(gui_args_vector_t &args)
 	stopAny(args);
 
 	file = new AudioFileSourcePROGMEM(enigma_mod, sizeof(enigma_mod));
+	//sourceSPIFFS->open("/mod.bootup");
 
 	mod->SetBufferSize(3 * 1024);
 	mod->SetSampleRate(44100);
 	mod->SetStereoSeparation(32);
+	//mod->begin(sourceSPIFFS, out);
 	mod->begin(file, out);
 
 	*((uint8_t *)(args[0])) = AT_MOD;
@@ -301,18 +294,17 @@ int Frame_Audio::init(gui_args_vector_t &args)
 		_but[i]->init();
 	}
 
+	sourceSD = new AudioFileSourceSD();
+	//sourceSPIFFS = new AudioFileSourceSPIFFS();
+
 	out = new AudioOutputI2S();
 	out->SetPinout(12, 0, 2);
 	out->SetOutputModeMono(true);
 	out->SetGain(_volume * 0.05);
 
 	rtttl = new AudioGeneratorRTTTL();
-
-	source = new AudioFileSourceSD();
 	mp3 = new AudioGeneratorMP3();
-
 	talkie = new AudioGeneratorTalkie();
-
 	mod = new AudioGeneratorMOD();
 
 	return 3;

@@ -162,8 +162,10 @@ void Frame_Base::StatusBar()
 		else
 			level = 1;
 
-		M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[level]);
+		M5.Lcd.drawBitmap(248, 0, 22, 22, wifiLevel[level]);
 	}
+
+	M5.Lcd.drawBitmap(272, 0, 22, 22, Battery4_22x22);
 
 	if (millis() - _time > 10000)
 	{
@@ -188,9 +190,9 @@ void Frame_Base::StatusBar()
 			globalSettings->hour = timeinfo.tm_hour;
 			globalSettings->mins = timeinfo.tm_min;
 
-			M5.Lcd.fillRect(220, 0, 50, 22, MWB_WHITE);
+			M5.Lcd.fillRect(196, 0, 50, 22, MWB_WHITE);
 			sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
-			M5.Lcd.setCursor(220, 16);
+			M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
 			M5.Lcd.print(buffer);
 		}
 	}
@@ -237,10 +239,12 @@ void Frame_Base::init_StatusBar()
 		else
 			level = 1;
 
-		M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[level]);
+		M5.Lcd.drawBitmap(248, 0, 22, 22, wifiLevel[level]);
 	}
 	else
-		M5.Lcd.drawBitmap(272, 0, 22, 22, wifiLevel[0]);
+		M5.Lcd.drawBitmap(248, 0, 22, 22, wifiLevel[0]);
+
+	M5.Lcd.drawBitmap(272, 0, 22, 22, Battery4_22x22);
 
 	_time = millis();
 	getLocalTime(&timeinfo);
@@ -248,9 +252,9 @@ void Frame_Base::init_StatusBar()
 	globalSettings->hour = timeinfo.tm_hour;
 	globalSettings->mins = timeinfo.tm_min;
 
-	M5.Lcd.fillRect(220, 0, 50, 22, MWB_WHITE);
+	M5.Lcd.fillRect(194, 0, 50, 22, MWB_WHITE);
 	sprintf(buffer, "%02d:%02d", globalSettings->hour, globalSettings->mins);
-	M5.Lcd.setCursor(220, 16);
+	M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
 	M5.Lcd.print(buffer);
 }
 

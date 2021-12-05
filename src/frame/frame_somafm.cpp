@@ -31,6 +31,8 @@ char fsfm_URL[64];
 char streamTitle[128];
 boolean __metaChange = false;
 boolean __saveConfig = false;
+boolean __isError = false;
+uint8_t __errorCnt = 0;
 
 /******************************************************************************
 * Functions
@@ -39,7 +41,24 @@ boolean __saveConfig = false;
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-// Called when a metadata event occurs (i.e. an ID3 tag, an ICY block, etc.
+void fsfm_StatusCallback(void *cbData, int code, const char *string)
+{
+	// check for "Buffer underrun"
+	if (code == 3)
+	{
+		__errorCnt++;
+
+		if (__errorCnt >= 4)
+		{
+			__errorCnt = 0;
+			__isError = true;
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+- Called when a metadata event occurs (i.e. an ID3 tag, an ICY block, etc.
+------------------------------------------------------------------------------*/
 void fsfm_MDCallback(void *cbData, const char *type, bool isUnicode, const char *string)
 {
 	char s2[128];
@@ -78,8 +97,11 @@ void fsfm_play(gui_args_vector_t &args)
 		}
 
 		fsfm_stream = new AudioFileSourceICYStream(fsfm_URL);
-		fsfm_streamBuf = new AudioFileSourceBuffer(fsfm_stream, 4096);
 		fsfm_stream->RegisterMetadataCB(fsfm_MDCallback, (void*)"ICY");
+
+		fsfm_streamBuf = new AudioFileSourceBuffer(fsfm_stream, 4096);
+		fsfm_streamBuf->RegisterStatusCB(fsfm_StatusCallback, (void *)"buffer");
+
 		fsfm_mp3->begin(fsfm_streamBuf, fsfm_out);
 
 		_but->setLabel("Stop");
@@ -111,8 +133,11 @@ void cycle_press(gui_args_vector_t &args)
 	}
 
 	fsfm_stream = new AudioFileSourceICYStream(fsfm_URL);
-	fsfm_streamBuf = new AudioFileSourceBuffer(fsfm_stream, 4096);
 	fsfm_stream->RegisterMetadataCB(fsfm_MDCallback, (void*)"ICY");
+
+	fsfm_streamBuf = new AudioFileSourceBuffer(fsfm_stream, 4096);
+	fsfm_streamBuf->RegisterStatusCB(fsfm_StatusCallback, (void *)"buffer");
+
 	fsfm_mp3->begin(fsfm_streamBuf, fsfm_out);
 
 	_but->setLabel("Stop");
@@ -226,6 +251,7 @@ int Frame_SomaFM::run()
 
 	M5.update();
 
+
 	if (M5.BtnA.wasPressed())
 	{
 		_volume --;
@@ -247,6 +273,18 @@ int Frame_SomaFM::run()
 		fsfm_out->SetGain((float)_volume * 0.05);
 		_string[1]->setValue(_volume);
 		__saveConfig = true;
+	}
+
+	if (__isError)
+	{
+		fsfm_mp3->stop();
+		delete fsfm_streamBuf;
+		delete fsfm_stream;
+
+		_but->setLabel("Play");
+		_string[0]->setValue("Buffer Error!");
+		__isError = false;
+		_isPlaying = false;
 	}
 
 	if (_isPlaying)

@@ -239,7 +239,7 @@ Frame_Main::Frame_Main(void): Frame_Base()
 	{
 		M5.Lcd.setFreeFont(&FreeSans9pt7b);
 		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-		M5.Lcd.setCursor(220, 16);
+		M5.Lcd.setCursor(194, 16);
 		M5.Lcd.print(buffer);
 	}
 }
@@ -331,7 +331,7 @@ int Frame_Main::init(gui_args_vector_t &args)
 	if (globalSettings->isNTPTime)
 	{
 		sprintf(buffer, "%02d:%02d", timeinfo.tm_hour, timeinfo.tm_min);
-		M5.Lcd.setCursor(220, 16);
+		M5.Lcd.setCursor(248 - M5.Lcd.textWidth(buffer) - 2, 16);
 		M5.Lcd.print(buffer);
 	}
 
