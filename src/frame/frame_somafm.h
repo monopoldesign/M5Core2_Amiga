@@ -46,7 +46,7 @@ class Frame_SomaFM : public Frame_Base
 		GUI_String *_string[2];
 		GUI_Button *_but;
 		boolean _isPlaying;
-		uint8_t _volume;
+		int8_t _volume;
 };
 
 #endif

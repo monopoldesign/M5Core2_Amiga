@@ -171,6 +171,9 @@ void Frame_Base::StatusBar()
 	{
 		_time = millis();
 
+		//M5.Lcd.writecommand(ILI9341_DISPOFF);
+		//M5.Lcd.setBrightness(0);
+
 		/*
 		if (globalSettings->isWifiConnected)
 		{
