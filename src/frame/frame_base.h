@@ -19,9 +19,11 @@
 #include "../gui/gui_checkbox.h"
 #include "../gui/gui_cycle.h"
 #include "../gui/gui_imgbutton.h"
+#include "../gui/gui_keyboard.h"
 #include "../gui/gui_list.h"
 #include "../gui/gui_slider.h"
 #include "../gui/gui_string.h"
+#include "../gui/gui_switch.h"
 
 /******************************************************************************
 * Definitions

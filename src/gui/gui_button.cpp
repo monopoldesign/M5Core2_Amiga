@@ -57,6 +57,7 @@ GUI_Button::~GUI_Button()
 ------------------------------------------------------------------------------*/
 void GUI_Button::init()
 {
+	_event = EVENT_NONE;
 	_buttonZone->setZone(_x, _y, _x + _w, _y + _h);
 }
 
@@ -67,7 +68,7 @@ void GUI_Button::Draw()
 {
 	uint8_t _o = 6;	// Offset for "Arrow"-Triangle
 	
-	if (_state == EVENT_NONE || _state == EVENT_RELEASED)
+	if (_event == EVENT_NONE || _event == EVENT_RELEASED)
 	{
 		switch (_type)
 		{
@@ -127,13 +128,13 @@ void GUI_Button::Draw()
 					M5.Lcd.setTextColor(MWB_BLACK);
 
 					uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-					M5.Lcd.setCursor(xtext, _y + 22);
+					M5.Lcd.setCursor(xtext, _y + (_h / 2) + 6);
 					M5.Lcd.print(_label);
 				}
 				break;
 		}
 	}
-	else if (_state == EVENT_PRESSED)
+	else if (_event == EVENT_PRESSED)
 	{
 		switch (_type)
 		{
@@ -193,7 +194,7 @@ void GUI_Button::Draw()
 					M5.Lcd.setTextColor(MWB_BLACK);
 
 					uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(_label) / 2));
-					M5.Lcd.setCursor(xtext, _y + 22);
+					M5.Lcd.setCursor(xtext, _y + (_h / 2) + 6);
 					M5.Lcd.print(_label);
 				}
 				break;
@@ -219,9 +220,9 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 {
 	if (_buttonZone->inHotZone(pos))
 	{
-		if (_state == EVENT_NONE)
+		if (_event == EVENT_NONE)
 		{
-			_state = EVENT_PRESSED;
+			_event = EVENT_PRESSED;
 			Draw();
 
 			if (_pressed_cb != NULL)
@@ -230,9 +231,9 @@ void GUI_Button::UpdateState(TouchPoint_t pos)
 	}
 	else
 	{
-		if (_state == EVENT_PRESSED)
+		if (_event == EVENT_PRESSED)
 		{
-			_state = EVENT_NONE;
+			_event = EVENT_NONE;
 			Draw();
 
 			if (_released_cb != NULL)
@@ -278,4 +279,15 @@ void GUI_Button::setLabel(String label)
 {
 	_label = label;
 	Draw();
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+boolean GUI_Button::isPressed()
+{
+	if (_event == EVENT_PRESSED)
+		return true;
+	else
+		return false;
 }

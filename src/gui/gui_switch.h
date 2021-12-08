@@ -1,11 +1,11 @@
-#ifndef _GUI_BUTTON_H
-#define _GUI_BUTTON_H
+#ifndef _GUI_SWITCH_H
+#define _GUI_SWITCH_H
 
 /******************************************************************************
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* GUI-Button-Class
+* GUI-Switch-Class
 *******************************************************************************/
 
 /******************************************************************************
@@ -19,17 +19,15 @@
 /******************************************************************************
 * Definitions
 *******************************************************************************/
-enum BUTTYPE {BUT_NORMAL, BUT_CLOSEW, BUT_ARROWUP, BUT_ARROWDOWN};
-
-class GUI_Button : public GUI_Base
+class GUI_Switch : public GUI_Base
 {
 	public:
-		GUI_Button(uint8_t type, int16_t x, int16_t y, int16_t w, int16_t h);
-		GUI_Button(String label, int16_t x, int16_t y, int16_t w, int16_t h);
-		~GUI_Button();
+		GUI_Switch(String label0, String label1, int16_t x, int16_t y, int16_t w, int16_t h);
+		~GUI_Switch();
 		void init();
 		void Draw();
-		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t&));
+		void drawLabel(String label);
+		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t &));
 		void UpdateState(TouchPoint_t pos);
 		void UpdatePosition(TouchPoint_t pos);
 		void AddArgs(int16_t event, uint16_t n, void *arg);
@@ -42,8 +40,8 @@ class GUI_Button : public GUI_Base
 		gui_args_vector_t _pressed_cb_args;
 		gui_args_vector_t _released_cb_args;
 		int16_t _event = EVENT_NONE;
-		uint8_t _type;
-		String _label;
+		uint8_t _state = 0;
+		String _label[2];
 		HotZone *_buttonZone;
 };
 

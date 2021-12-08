@@ -27,19 +27,28 @@ class GUI_String : public GUI_Base
 		~GUI_String();
 		void init();
 		void Draw();
+		void Bind(int16_t event, void (*func_cb)(gui_args_vector_t &));
 		void UpdateState(TouchPoint_t pos);
 		void UpdatePosition(TouchPoint_t pos);
-
+		void AddArgs(int16_t event, uint16_t n, void *arg);
 		void setValue(String newString);
 		void setValue(uint32_t newValue);
+		String getValue();
 
 	private:
-		gui_args_vector_t _cb_args;
+		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
+		void (*_released_cb)(gui_args_vector_t& args) = NULL;
+		gui_args_vector_t _pressed_cb_args;
+		gui_args_vector_t _released_cb_args;
+		int16_t _event = EVENT_NONE;
+
 		String _label;
 		String _content;
 		String _contentOrig;
 		uint8_t _maxLen;
 		char _buffer[32];
+
+		HotZone *_buttonZone;
 };
 
 #endif

@@ -171,6 +171,20 @@ void GUI_AddFrame(String name, Frame_Base *frame)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
+void GUI_AddFrameArg(String name, int n, void* arg)
+{
+	if (frame_map.count(name) == 0)
+		return;
+
+	if (frame_map[name].args.size() > n)
+		frame_map[name].args[n] = arg;
+	else
+		frame_map[name].args.push_back(arg);
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
 Frame_Base* GUI_GetFrame(String name)
 {
 	if (frame_map.count(name) > 0)

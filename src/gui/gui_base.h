@@ -21,15 +21,19 @@
 typedef std::vector<void *> gui_args_vector_t;
 
 #define READONLY true
-enum EVT {EVENT_NONE, EVENT_PRESSED, EVENT_RELEASED, EVENT_MOVED};
+
+#define WINLEFT	4
+#define WINTOP	24
+
+enum EVT {EVENT_NONE, EVENT_PRESSED, EVENT_RELEASED, EVENT_MOVED, EVENT_FINISHED};
 enum PLACEMENT {PM_LEFT, PM_RIGHT, PM_ABOVE, PM_BELOW};
 
 class GUI_Base
 {
 	public:
-		GUI_Base(int16_t x, int16_t y, int16_t w, int16_t h);
-		GUI_Base(int16_t x, int16_t y);
 		GUI_Base();
+		GUI_Base(int16_t x, int16_t y);
+		GUI_Base(int16_t x, int16_t y, int16_t w, int16_t h);
 		virtual ~GUI_Base() {};
 		virtual void Draw() = 0;
 		virtual void UpdateState(TouchPoint_t pos) = 0;

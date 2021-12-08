@@ -2,14 +2,14 @@
 * M5Core2_Amiga
 * (C)2021 M.Volkel
 *
-* GUI-String-Class
+* GUI-Switch-Class
 *******************************************************************************/
 
 /******************************************************************************
 * Header-Files
 *******************************************************************************/
 #include "M5Core2.h"
-#include "gui_string.h"
+#include "gui_switch.h"
 
 /******************************************************************************
 * Functions
@@ -18,28 +18,10 @@
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-GUI_String::GUI_String(String label, String content, int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
+GUI_Switch::GUI_Switch(String label0, String label1, int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
 {
-	_label = label;
-	_content = content;
-	_contentOrig = content;
-
-	_x = x;
-	_y = y;
-	_w = w;
-	_h = h;
-
-	_maxLen = _w / 11;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-GUI_String::GUI_String(String label, uint32_t content, int16_t x, int16_t y, int16_t w, int16_t h) : GUI_Base(x, y, w, h)
-{
-	_label = label;
-	_content = String(content, DEC);
-	_contentOrig = _content;
+	_label[0] = label0;
+	_label[1] = label1;
 
 	_x = x;
 	_y = y;
@@ -52,65 +34,86 @@ GUI_String::GUI_String(String label, uint32_t content, int16_t x, int16_t y, int
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-GUI_String::~GUI_String()
+GUI_Switch::~GUI_Switch()
 {
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::init()
+void GUI_Switch::init()
 {
-	_content = _contentOrig;
-	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
+	_buttonZone->setZone(_x, _y, _x + _w, _y + _h);
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::Draw()
+void GUI_Switch::Draw()
 {
-	if (_ishide)
-		return;
+	if (_event == EVENT_NONE || _event == EVENT_RELEASED)
+	{
+		M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
+		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_WHITE);
+		M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_WHITE);
+		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_WHITE);
+		M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_BLACK);
+		M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_BLACK);
 
-	M5.Lcd.fillRect(_x, _y, _w, _h, MWB_GRAY);
-	M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
-	M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
-	M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
-	M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
-	M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
-	M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
+		switch (_state)
+		{
+			case 0:
+				drawLabel(_label[0]);
+				break;
+			case 1:
+				drawLabel(_label[1]);
+				break;
+		}
+	}
+	else if (_event == EVENT_PRESSED)
+	{
+		M5.Lcd.fillRect(_x, _y, _w, _h, MWB_BLUE);
+		M5.Lcd.drawLine(_x, _y, _x, _y + _h - 1, MWB_BLACK);
+		M5.Lcd.drawLine(_x + 1, _y, _x + 1, _y + _h - 1, MWB_BLACK);
+		M5.Lcd.drawLine(_x, _y, _x + _w - 1, _y, MWB_BLACK);
+		M5.Lcd.drawLine(_x + 1, _y + _h - 1, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+		M5.Lcd.drawLine(_x + _w - 1, _y, _x + _w - 1, _y + _h - 1, MWB_WHITE);
+		M5.Lcd.drawLine(_x + _w - 2, _y + 1, _x + _w - 2, _y + _h - 1, MWB_WHITE);
 
-	if (_label.length() > 0)
+		switch (_state)
+		{
+			case 0:
+				drawLabel(_label[0]);
+				break;
+			case 1:
+				drawLabel(_label[1]);
+				break;
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+-
+------------------------------------------------------------------------------*/
+void GUI_Switch::drawLabel(String label)
+{
+	if (label.length() > 0)
 	{
 		M5.Lcd.setFreeFont(&FreeSans9pt7b);
 		M5.Lcd.setTextSize(1);
 		M5.Lcd.setTextColor(MWB_BLACK);
 
-		uint8_t _xs = _x - M5.Lcd.textWidth(_label) - 8;
-		uint8_t _ys = (_h / 2) + 5;
-		M5.Lcd.setCursor(_xs, _y + _ys);
-		M5.Lcd.print(_label);
-	}
-
-	if (_content.length() > 0)
-	{
-		M5.Lcd.setFreeFont(&FreeSans9pt7b);
-		M5.Lcd.setTextSize(1);
-		M5.Lcd.setTextColor(MWB_BLACK);
-
-		uint8_t _ys = (_h / 2) + 5;
-		M5.Lcd.setCursor(_x + 8, _y + _ys);
-		memset(_buffer, '\0', sizeof(_buffer));
-		strncpy(_buffer, _content.c_str(), _maxLen);
-		M5.Lcd.print(_buffer);
+		uint16_t xtext = _x + ((_w / 2) - (M5.Lcd.textWidth(label) / 2));
+		M5.Lcd.setCursor(xtext, _y + (_h / 2) + 6);
+		M5.Lcd.print(label);
 	}
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
+void GUI_Switch::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
 {
 	if (event == EVENT_PRESSED)
 		_pressed_cb = func_cb;
@@ -121,7 +124,7 @@ void GUI_String::Bind(int16_t event, void (*func_cb)(gui_args_vector_t&))
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::UpdateState(TouchPoint_t pos)
+void GUI_Switch::UpdateState(TouchPoint_t pos)
 {
 	if (_buttonZone->inHotZone(pos))
 	{
@@ -139,6 +142,12 @@ void GUI_String::UpdateState(TouchPoint_t pos)
 		if (_event == EVENT_PRESSED)
 		{
 			_event = EVENT_NONE;
+
+			_state++;
+
+			if (_state > 1)
+				_state = 0;
+
 			Draw();
 
 			if (_released_cb != NULL)
@@ -152,14 +161,14 @@ void GUI_String::UpdateState(TouchPoint_t pos)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::UpdatePosition(TouchPoint_t pos)
+void GUI_Switch::UpdatePosition(TouchPoint_t pos)
 {
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::AddArgs(int16_t event, uint16_t n, void* arg)
+void GUI_Switch::AddArgs(int16_t event, uint16_t n, void* arg)
 {
 	if (event == EVENT_PRESSED)
 	{
@@ -180,25 +189,19 @@ void GUI_String::AddArgs(int16_t event, uint16_t n, void* arg)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::setValue(String newString)
+void GUI_Switch::setLabel(String label)
 {
-	_content = newString;
+	_label[0] = label;
 	Draw();
 }
 
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void GUI_String::setValue(uint32_t newValue)
+boolean GUI_Switch::isPressed()
 {
-	_content = String(newValue, DEC);
-	Draw();
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
-String GUI_String::getValue()
-{
-	return _content;
+	if (_event == EVENT_PRESSED)
+		return true;
+	else
+		return false;
 }

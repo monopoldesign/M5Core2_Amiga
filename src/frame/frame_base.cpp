@@ -22,6 +22,15 @@ const unsigned short *wifiLevel[4] =
 	wifi4_22x22
 };
 
+const unsigned short *batteryLevel[5] =
+{
+	Battery0_22x22,
+	Battery1_22x22,
+	Battery2_22x22,
+	Battery3_22x22,
+	Battery4_22x22
+};
+
 /******************************************************************************
 * Functions
 *******************************************************************************/
@@ -165,11 +174,14 @@ void Frame_Base::StatusBar()
 		M5.Lcd.drawBitmap(248, 0, 22, 22, wifiLevel[level]);
 	}
 
-	M5.Lcd.drawBitmap(272, 0, 22, 22, Battery4_22x22);
-
-	if (millis() - _time > 30000)
+	if (millis() - _time > 10000)
 	{
 		_time = millis();
+
+		if (M5.Axp.isCharging())
+			M5.Lcd.drawBitmap(272, 0, 22, 22, batteryLevel[0]);
+		else
+			M5.Lcd.drawBitmap(272, 0, 22, 22, batteryLevel[4]);
 
 		//M5.Lcd.writecommand(ILI9341_DISPOFF);
 		//M5.Lcd.setBrightness(0);
