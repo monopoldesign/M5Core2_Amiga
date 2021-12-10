@@ -176,7 +176,7 @@ void but_play5(gui_args_vector_t &args)
 	out->begin();
 
 	sam = new ESP8266SAM;
-	sam->SetVoice(VOICE_SAM);
+	sam->SetVoice(sam->SAMVoice::VOICE_SAM);
 	sam->Say(out, "Can you hear me ?");
 
 	*((uint8_t *)(args[0])) = AT_SAM;
