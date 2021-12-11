@@ -35,6 +35,7 @@ class GUI_Switch : public GUI_Base
 		boolean isPressed();
 
 	private:
+		HotZone *_buttonZone;
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -42,7 +43,6 @@ class GUI_Switch : public GUI_Base
 		int16_t _event = EVENT_NONE;
 		uint8_t _state = 0;
 		String _label[2];
-		HotZone *_buttonZone;
 };
 
 #endif

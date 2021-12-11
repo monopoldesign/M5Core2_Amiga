@@ -40,6 +40,10 @@ class GUI_Slider : public GUI_Base
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		HotZone *_knobZone;
+		TouchPoint_t _startPos, _oldPos;
+		boolean _isMoveable;
+
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -49,10 +53,6 @@ class GUI_Slider : public GUI_Base
 		int8_t _min, _max, _level;
 		float _sizeY, _step;
 		int8_t _selMin;
-
-		HotZone *_knobZone;
-		TouchPoint_t _startPos, _oldPos;
-		boolean _isMoveable;
 };
 
 #endif

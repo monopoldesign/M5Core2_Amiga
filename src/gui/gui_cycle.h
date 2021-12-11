@@ -44,6 +44,7 @@ class GUI_Cycle : public GUI_Base
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		HotZone *_buttonZone;
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -54,7 +55,6 @@ class GUI_Cycle : public GUI_Base
 		uint8_t _selectedItem;
 		boolean _isSelected;
 		LinkedList<CycleItem *> _itemList;
-		HotZone *_buttonZone;
 };
 
 #endif

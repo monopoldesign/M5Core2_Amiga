@@ -30,6 +30,8 @@ GUI_String::GUI_String(String label, String content, int16_t x, int16_t y, int16
 	_h = h;
 
 	_maxLen = _w / 11;
+
+	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
 }
 
 /*------------------------------------------------------------------------------
@@ -45,6 +47,8 @@ GUI_String::GUI_String(String label, uint32_t content, int16_t x, int16_t y, int
 	_y = y;
 	_w = w;
 	_h = h;
+
+	_maxLen = _w / 11;
 
 	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
 }
@@ -62,7 +66,7 @@ GUI_String::~GUI_String()
 void GUI_String::init()
 {
 	_content = _contentOrig;
-	_buttonZone = new HotZone(_x, _y, _x + _w, _y + _h);
+	_buttonZone->setZone(_x, _y, _x + _w, _y + _h);
 }
 
 /*------------------------------------------------------------------------------
@@ -128,7 +132,6 @@ void GUI_String::UpdateState(TouchPoint_t pos)
 		if (_event == EVENT_NONE)
 		{
 			_event = EVENT_PRESSED;
-			Draw();
 
 			if (_pressed_cb != NULL)
 				_pressed_cb(_pressed_cb_args);
@@ -139,14 +142,13 @@ void GUI_String::UpdateState(TouchPoint_t pos)
 		if (_event == EVENT_PRESSED)
 		{
 			_event = EVENT_NONE;
-			Draw();
 
 			if (_released_cb != NULL)
 				_released_cb(_released_cb_args);
 		}
-		else
-			Draw();
 	}
+
+	Draw();
 }
 
 /*------------------------------------------------------------------------------

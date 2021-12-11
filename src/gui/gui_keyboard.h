@@ -39,6 +39,8 @@ class GUI_Keyboard : public GUI_Base
 		void setString();
 
 	private:
+		HotZone *_buttonZone;
+
 		void (*_finished_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _finished_cb_args;
 		int16_t _event = EVENT_NONE;
@@ -48,7 +50,6 @@ class GUI_Keyboard : public GUI_Base
 		GUI_String *_string;
 		String _data;
 		uint8_t _layout = 0;
-		HotZone *_buttonZone;
 };
 
 #endif

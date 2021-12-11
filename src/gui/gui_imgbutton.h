@@ -31,6 +31,7 @@ class GUI_ImgButton : public GUI_Base
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		HotZone *_buttonZone;
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -38,7 +39,6 @@ class GUI_ImgButton : public GUI_Base
 		int16_t _state = EVENT_NONE;
 		const uint16_t *_imageUp;
 		const uint16_t *_imageDown;
-		HotZone *_buttonZone;
 };
 
 #endif

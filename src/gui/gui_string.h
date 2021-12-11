@@ -36,6 +36,8 @@ class GUI_String : public GUI_Base
 		String getValue();
 
 	private:
+		HotZone *_buttonZone;
+
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -47,8 +49,6 @@ class GUI_String : public GUI_Base
 		String _contentOrig;
 		uint8_t _maxLen;
 		char _buffer[32];
-
-		HotZone *_buttonZone;
 };
 
 #endif

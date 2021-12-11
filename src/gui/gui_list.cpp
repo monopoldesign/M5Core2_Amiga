@@ -145,11 +145,11 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 {
 	for (uint8_t i = 0; i < _maxItems; i++)
 	{
-		if (_itemZone[i]->inHotZone(pos) && i < _itemList.size())
+		if (_itemZone[i]->inHotZone(pos) && (i + _selectedMin) < _itemList.size())
 		{
-			if (_state == EVENT_NONE)
+			if (_state[i] == EVENT_NONE)
 			{
-				_state = EVENT_PRESSED;
+				_state[i] = EVENT_PRESSED;
 				Draw();
 
 				if (_pressed_cb != NULL)
@@ -158,12 +158,12 @@ void GUI_List::UpdateState(TouchPoint_t pos)
 		}
 		else
 		{
-			if (_state == EVENT_PRESSED)
+			if (_state[i] == EVENT_PRESSED)
 			{
 				_selectedItem = i + _selectedMin;
 				_isSelected = true;
 
-				_state = EVENT_NONE;
+				_state[i] = EVENT_NONE;
 				Draw();
 
 				if (_released_cb != NULL)
