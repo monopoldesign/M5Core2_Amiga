@@ -32,7 +32,8 @@ void but_rescan(gui_args_vector_t &args)
 	GUI_List *_li = (GUI_List *)(args[0]);
 	GUI_Slider *_slid = (GUI_Slider *)(args[1]);
 
-	_li->clearItemList();
+	_li->init();
+	//_li->clearItemList();
 
 	m5wifi_scanWifi();
 

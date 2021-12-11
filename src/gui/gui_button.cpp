@@ -57,7 +57,6 @@ GUI_Button::~GUI_Button()
 ------------------------------------------------------------------------------*/
 void GUI_Button::init()
 {
-	_event = EVENT_NONE;
 	_buttonZone->setZone(_x, _y, _x + _w, _y + _h);
 }
 

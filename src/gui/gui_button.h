@@ -37,6 +37,7 @@ class GUI_Button : public GUI_Base
 		boolean isPressed();
 
 	private:
+		HotZone *_buttonZone;
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -44,7 +45,6 @@ class GUI_Button : public GUI_Base
 		int16_t _event = EVENT_NONE;
 		uint8_t _type;
 		String _label;
-		HotZone *_buttonZone;
 };
 
 #endif

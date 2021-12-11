@@ -35,6 +35,7 @@ class GUI_Checkbox : public GUI_Base
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		HotZone *_buttonZone;
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
@@ -43,7 +44,6 @@ class GUI_Checkbox : public GUI_Base
 		String _label;
 		uint8_t _placement;
 		boolean _isChecked;
-		HotZone *_buttonZone;
 };
 
 #endif

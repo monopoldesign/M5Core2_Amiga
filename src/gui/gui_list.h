@@ -50,13 +50,14 @@ class GUI_List : public GUI_Base
 		void AddArgs(int16_t event, uint16_t n, void *arg);
 
 	private:
+		HotZone *_itemZone[10];
+
 		void (*_pressed_cb)(gui_args_vector_t& args) = NULL;
 		void (*_released_cb)(gui_args_vector_t& args) = NULL;
 		gui_args_vector_t _pressed_cb_args;
 		gui_args_vector_t _released_cb_args;
 		int16_t _state = EVENT_NONE;
 
-		HotZone *_itemZone[10];
 		uint8_t _selectedItem, _selectedMin;
 		boolean _readOnly, _isSelected;
 		uint8_t _maxChar, _maxItems;

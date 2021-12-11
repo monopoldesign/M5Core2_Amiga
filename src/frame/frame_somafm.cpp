@@ -235,7 +235,7 @@ int Frame_SomaFM::init(gui_args_vector_t &args)
 	fsfm_out = new AudioOutputI2S();
 	fsfm_out->SetPinout(12, 0, 2);
 	fsfm_out->SetOutputModeMono(true);
-	fsfm_out->SetGain(_volume * 0.05);
+	fsfm_out->SetGain((float)_volume * 0.05);
 
 	fsfm_mp3 = new AudioGeneratorMP3();
 

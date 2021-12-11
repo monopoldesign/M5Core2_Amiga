@@ -23,7 +23,6 @@
 #include "frame_somafm.h"
 #include "frame_alarm.h"
 #include "frame_keyb.h"
-#include "frame_input.h"
 
 /******************************************************************************
 * Functions
@@ -192,22 +191,6 @@ void key_app9_cb(gui_args_vector_t &args)
 /*------------------------------------------------------------------------------
 -
 ------------------------------------------------------------------------------*/
-void key_app10_cb(gui_args_vector_t &args)
-{
-	Frame_Base *frame = GUI_GetFrame("Frame_Input");
-
-	if (frame == NULL)
-	{
-		frame = new Frame_Input();
-		GUI_AddFrame("Frame_Input", frame);
-	}
-	GUI_PushFrame(frame);
-	*((int*)(args[0])) = 0;
-}
-
-/*------------------------------------------------------------------------------
--
-------------------------------------------------------------------------------*/
 Frame_Main::Frame_Main(void): Frame_Base()
 {
 	_frame_name = "Frame_Main";
@@ -289,9 +272,6 @@ Frame_Main::Frame_Main(void): Frame_Base()
 
 	_key[9]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
 	_key[9]->Bind(EVENT_RELEASED, key_app9_cb);
-
-	_key[10]->AddArgs(EVENT_RELEASED, 0, (void*)(&_is_run));
-	_key[10]->Bind(EVENT_RELEASED, key_app10_cb);
 }
 
 /*------------------------------------------------------------------------------
