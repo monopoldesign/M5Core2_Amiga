@@ -33,8 +33,6 @@ void but_rescan(gui_args_vector_t &args)
 	GUI_Slider *_slid = (GUI_Slider *)(args[1]);
 
 	_li->init();
-	//_li->clearItemList();
-
 	m5wifi_scanWifi();
 
 	if (wifiNetworkList.size() > 0)
@@ -67,8 +65,11 @@ void but_arrowUp(gui_args_vector_t &args)
 {
 	GUI_List *_li = (GUI_List *)(args[0]);
 	GUI_Slider *_slid = (GUI_Slider *)(args[1]);
+	GUI_String *_str = (GUI_String *)(args[2]);
 
 	_li->selectPrevItem();
+
+	_str->setValue(_li->getSelectedItem());
 
 	uint8_t min = _li->getSelectedMin();
 	_slid->setSelectedMin(min);
@@ -81,8 +82,11 @@ void but_arrowDown(gui_args_vector_t &args)
 {
 	GUI_List *_li = (GUI_List *)(args[0]);
 	GUI_Slider *_slid = (GUI_Slider *)(args[1]);
+	GUI_String *_str = (GUI_String *)(args[2]);
 
 	_li->selectNextItem();
+
+	_str->setValue(_li->getSelectedItem());
 
 	uint8_t min = _li->getSelectedMin();
 	_slid->setSelectedMin(min);
@@ -134,11 +138,13 @@ Frame_WifiMan::Frame_WifiMan(void)
 	_but[0] = new GUI_Button(BUT_ARROWUP, 10 + 200, 8 + (2 * 24) + 148 - 64, 28, 32);
 	_but[0]->AddArgs(EVENT_RELEASED, 0, _list);
 	_but[0]->AddArgs(EVENT_RELEASED, 1, _slider);
+	_but[0]->AddArgs(EVENT_RELEASED, 2, _string);
 	_but[0]->Bind(EVENT_RELEASED, &but_arrowUp);
 
 	_but[1] = new GUI_Button(BUT_ARROWDOWN, 10 + 200, 8 + (2 * 24) + 148 - 32, 28, 32);
 	_but[1]->AddArgs(EVENT_RELEASED, 0, _list);
 	_but[1]->AddArgs(EVENT_RELEASED, 1, _slider);
+	_but[1]->AddArgs(EVENT_RELEASED, 2, _string);
 	_but[1]->Bind(EVENT_RELEASED, &but_arrowDown);
 
 	_slider = new GUI_Slider(10 + 200, 8 + (2 * 24), 28, 148);
@@ -184,18 +190,6 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 	GUI_AddObject(_list);
 	_list->init();
 
-	for (uint8_t i = 0; i < 4; i++)
-	{
-		GUI_AddObject(_but[i]);
-		_but[i]->init();
-	}
-
-	GUI_AddObject(_string);
-	_string->init();
-
-	GUI_AddObject(_cb);
-	_cb->init();
-
 	/*
 	if (wifiNetworkList.size() > 0)
 	{
@@ -226,6 +220,18 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 	GUI_AddObject_Move(_slider);
 	_slider->init();
 
+	for (uint8_t i = 0; i < 4; i++)
+	{
+		GUI_AddObject(_but[i]);
+		_but[i]->init();
+	}
+
+	GUI_AddObject(_string);
+	_string->init();
+
+	GUI_AddObject(_cb);
+	_cb->init();
+
 	return 3;
 }
 
@@ -234,7 +240,6 @@ int Frame_WifiMan::init(gui_args_vector_t &args)
 ------------------------------------------------------------------------------*/
 int Frame_WifiMan::run()
 {
-	//Frame_Base::run();
-
+	Frame_Base::run();
 	return 1;
 }
